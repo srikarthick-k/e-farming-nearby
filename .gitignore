@@ -1,0 +1,15 @@
+# Client files
+/client/node_modules
+/client/package-lock.json
+/client/package.json
+/client/README.md
+
+# Server files
+/server/node_modules
+/server/package.json
+/server/.env
+/server/yarn.lock
+
+# Root files 
+yarn.lock
+productsER.drawio
