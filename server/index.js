@@ -12,7 +12,7 @@ app.use("/auth", require("./routes/jwtAuth"));
 // create an Account
 
 //3. Post product
-app.post("/post/product", async (req, res) => {
+app.post("/product", async (req, res) => {
   try {
     const {
       pname,
@@ -41,7 +41,7 @@ app.post("/post/product", async (req, res) => {
         maxquantity,
       ]
     );
-    res.json("Successfully created new product");
+    res.json(true);
   } catch (err) {
     console.error(err.message);
   }
@@ -51,23 +51,40 @@ app.post("/post/product", async (req, res) => {
 
 // 4. View Product (All and Individual)
 // individual product
-app.get("/get/product/:id", async (req, res) => {
+app.get("/product/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const product = await pool.query("SELECT * FROM product where id = $1", [
       id,
     ]);
     if (product.rowCount === 0) {
-      return res.status(401).jsom("Product not found");
+      return res.status(401).json("Product not found");
     }
-    res.json(product.rows[0])
+    res.json(product.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+// get all products in category
+app.get("/products/:category", async (req, res) => {
+  try {
+    const {category} = req.params;
+    const product = await pool.query("SELECT * FROM product WHERE category = $1", [category]);
+    if(product.rowCount === 0) {
+      return res.status(401).json("No products in category");
+    }
+    res.json(product.rows)
   } catch (err) {
     console.error(err.message);
   }
 });
 
-// 5. Update Product
 
+
+
+
+// @Low priority
+// 5. Update Product
 // 6. Delete Product
 
 // Reference

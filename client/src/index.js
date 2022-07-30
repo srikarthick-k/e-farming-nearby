@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./accounts/Login";
 
 // Components
 import Register from "./accounts/Register";
 import Navbar from "./components/Navbar";
+import Login from "./accounts/Login";
+import Postproduct from "./core/postproduct";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,6 +17,7 @@ root.render(
             <Route path="/" element={ <Login /> } />
             <Route path="/nav" element={ <Navbar /> }/>
             <Route path="/register" element={ <Register /> } />
+            <Route path="/post/product" element={ < Postproduct />}/>
         </Routes>
     </BrowserRouter>
   </React.StrictMode>

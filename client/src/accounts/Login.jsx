@@ -7,7 +7,8 @@ function Login() {
     const [password, setPassword] = useState("")
 
     const emailChange = (event) =>{
-        setEmail(event.target.value)
+        setEmail(event.target.value.replace(/"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"/,
+        ""))
     }
 
     const passwordChange = (event) =>{
@@ -27,7 +28,7 @@ function Login() {
             const result = await response.json();
             console.log(result);
             if(result){
-                window.location = "/register"           
+                window.location = "/post/product"           
             }
         } catch (err) {
             console.error(err.message);
