@@ -27,9 +27,7 @@ function Login() {
             })
             const result = await response.json();
             console.log(result);
-            if(result){
-                window.location = "/post/product"           
-            }
+            result === true ? window.location = "/post/product" : alert("Login credentials are wrong!!!")
         } catch (err) {
             console.error(err.message);
         }
