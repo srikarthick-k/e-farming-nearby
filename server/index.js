@@ -83,7 +83,7 @@ app.get("/products/:category", async (req, res) => {
 });
 
 // Get category:
-
+// Fetches categories based on delivery location without repeatition
 app.get("/category", async (req, res) => {
   try {
     const { deliverylocation } = req.body;
