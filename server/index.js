@@ -68,20 +68,38 @@ app.get("/product/:id", async (req, res) => {
 // get all products in category
 app.get("/products/:category", async (req, res) => {
   try {
-    const {category} = req.params;
-    const product = await pool.query("SELECT * FROM product WHERE category = $1", [category]);
-    if(product.rowCount === 0) {
+    const { category } = req.params;
+    const product = await pool.query(
+      "SELECT * FROM product WHERE category = $1",
+      [category]
+    );
+    if (product.rowCount === 0) {
       return res.status(401).json("No products in category");
     }
-    res.json(product.rows)
+    return res.json(product.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
 
+// Get category:
 
-
-
+app.get("/category", async (req, res) => {
+  try {
+    const { deliverylocation } = req.body;
+    const category  = await pool.query(
+      // "SELECT CATEGORY FROM PRODUCT WHERE DELIVERYLOCATION = $1",
+      "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) > 1;",
+      [deliverylocation]
+    );
+    if (category.rowCount === 0) {
+      return res.status(401).json("No products available in current location");
+    }
+    return res.json(category.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 // @Low priority
 // 5. Update Product

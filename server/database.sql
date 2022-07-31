@@ -30,3 +30,9 @@ CREATE TABLE product (
     minquantity INT,
     maxquantity INT
 );
+
+
+-- Category;
+
+-- /category
+SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) > 1;
