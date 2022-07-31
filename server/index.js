@@ -46,8 +46,29 @@ app.post("/product", async (req, res) => {
     console.error(err.message);
   }
 });
+
+
+// Get category:
+// Fetches categories based on delivery location without repeatition
+app.post("/category", async (req, res) => {
+  try {
+    const { deliverylocation } = req.body;
+    const category  = await pool.query(
+      // "SELECT CATEGORY FROM PRODUCT WHERE DELIVERYLOCATION = $1",
+      "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) > 1;",
+      [deliverylocation]
+    );
+    if (category.rowCount === 0) {
+      return res.status(404).json("No products available in current location");
+    }
+    return res.json(category.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 // Working fine
 // In frontend The seller shouldn't have access to post prating
+
 
 // 4. View Product (All and Individual)
 // individual product
@@ -82,24 +103,6 @@ app.get("/products/:category", async (req, res) => {
   }
 });
 
-// Get category:
-// Fetches categories based on delivery location without repeatition
-app.get("/category", async (req, res) => {
-  try {
-    const { deliverylocation } = req.body;
-    const category  = await pool.query(
-      // "SELECT CATEGORY FROM PRODUCT WHERE DELIVERYLOCATION = $1",
-      "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) > 1;",
-      [deliverylocation]
-    );
-    if (category.rowCount === 0) {
-      return res.status(401).json("No products available in current location");
-    }
-    return res.json(category.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
 
 // @Low priority
 // 5. Update Product

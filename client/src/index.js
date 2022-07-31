@@ -7,7 +7,7 @@ import Register from "./accounts/Register";
 import Navbar from "./components/Navbar";
 import Login from "./accounts/Login";
 import Postproduct from "./core/postproduct";
-
+import Category from "./core/category";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -18,6 +18,7 @@ root.render(
             <Route path="/nav" element={ <Navbar /> }/>
             <Route path="/register" element={ <Register /> } />
             <Route path="/post/product" element={ < Postproduct />}/>
+            <Route path="/category" element={ < Category />}  />
         </Routes>
     </BrowserRouter>
   </React.StrictMode>
