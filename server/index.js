@@ -56,7 +56,7 @@ app.get("/category/:deliverylocation", async (req, res) => {
     const { deliverylocation } = req.params;
     console.log(req.params);
     const category = await pool.query(
-      "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) > 1;",
+      "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) >= 1;",
       [deliverylocation]
     );
     if (category.rowCount === 0) {
@@ -69,12 +69,12 @@ app.get("/category/:deliverylocation", async (req, res) => {
 });
 
 // get all products in category
-app.get("/products/:category", async (req, res) => {
+app.get("/products/:category/:deliverylocation", async (req, res) => {
   try {
-    const { category } = req.params;
+    const { category, deliverylocation } = req.params;
     const product = await pool.query(
-      "SELECT * FROM product WHERE category = $1",
-      [category]
+      "SELECT * FROM product WHERE deliverylocation = $1 AND category = $2;",
+      [deliverylocation, category]
     );
     if (product.rowCount === 0) {
       return res.status(401).json("No products in category");
