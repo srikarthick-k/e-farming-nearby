@@ -50,7 +50,7 @@ function Category() {
           {categories.map((cat=>
           <button
             key={cat.category}
-            onClick={()=>window.location=`/products/${cat.category}`}
+            onClick={()=>window.location=`/products/${cat.category}/${deliverylocation}`}
           >
             {cat.category}
           </button>))}
