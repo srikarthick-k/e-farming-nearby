@@ -1,43 +1,39 @@
-// Problem in fetching the data as well as posting the data at the same time
+//** @TODO On next version 2.0 of this app I'm gonna include the option where user can search for available categories in that location. When they select the option from list of locations, the url parameter changes as well
+
 
 import React, { Fragment, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function Category() {
-  const [categories, setcategories] = useState();
-  const [deliverylocation, setdeliverylocation] = useState("");
-  const deliverylocationChange = async (e) => {
-    setdeliverylocation(e.target.value);
-  };
-  const onSubmitCategory = async (e) => {
-    e.preventDefault();
+  const {deliverylocation} = useParams();
+  const [categories, setcategories] = useState([]);
 
+  //** On next version 2.0
+  // const [deliverylocation, setdeliverylocation] = useState("");
+  // const deliverylocationChange = async (e) => {
+  //   setdeliverylocation(e.target.value);
+  // }; 
+
+  // onClick  👆
+  const onSubmitCategory = async () => {
     try {
-      const body = { deliverylocation };
-      const response = await fetch("http://localhost:4000/category", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      const response = await fetch(`http://localhost:4000/category/${deliverylocation}`);
       const jsonData = await response.json();
-      setcategories(jsonData);
+      setcategories(jsonData)
     } catch (err) {
       console.error(err.message);
     }
+
   };
-
-  // send data to categories using useEffect:
-  // function getcat() {
-
-  // }
-
-  // useEffect(()=>{
-  //   onSubmitCategory();
-  // },[])
+  useEffect(()=>{
+    onSubmitCategory();
+  },[])
 
   return (
     <Fragment>
       <div>
-        <form onSubmit={onSubmitCategory}>
+        {/* //**version2.0  */}
+         {/* <form>
           <select value={deliverylocation} onChange={deliverylocationChange}>
             <option value="">Not selected</option>
             <option value="bangarpet">Bangarpet</option>
@@ -45,14 +41,19 @@ function Category() {
             <option value="bengaluru">Bengaluru</option>
             <option value="kolar">Kolar</option>
           </select>
-          <button type="submit">Fetch</button>
-        </form>
+          <button type="submit">Fetch</button> 
+        </form> */}
       </div>
       <div>
         <h1>Products: </h1>
-        {/* <p>{categories}</p> */}
         <ul>
-          {categories}
+          {categories.map((cat=>
+          <button
+            key={cat.category}
+            onClick={()=>window.location=`/products/${cat.category}`}
+          >
+            {cat.category}
+          </button>))}
         </ul>
       </div>
     </Fragment>
