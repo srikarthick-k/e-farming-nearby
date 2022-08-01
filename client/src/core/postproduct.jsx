@@ -137,7 +137,7 @@ function Postproduct() {
               <option value="">Not selected</option>
               <option value="bangarpet">Bangarpet</option>
               <option value="kgf">KGF</option>
-              <option value="bengaluru">Bangaluru</option>
+              <option value="bengaluru">Bengaluru</option>
               <option value="kolar">Kolar</option>
             </select>
           </div>
