@@ -46,46 +46,28 @@ app.post("/product", async (req, res) => {
     console.error(err.message);
   }
 });
-
+// Working fine
+// In frontend The seller shouldn't have access to post prating
 
 // Get category:
 // Fetches categories based on delivery location without repeatition
-app.post("/category", async (req, res) => {
+app.get("/category/:deliverylocation", async (req, res) => {
   try {
-    const { deliverylocation } = req.body;
-    const category  = await pool.query(
-      // "SELECT CATEGORY FROM PRODUCT WHERE DELIVERYLOCATION = $1",
+    const { deliverylocation } = req.params;
+    console.log(req.params);
+    const category = await pool.query(
       "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) > 1;",
       [deliverylocation]
     );
     if (category.rowCount === 0) {
       return res.status(404).json("No products available in current location");
     }
-    return res.json(category.rows[0]);
+    return res.json(category.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
-// Working fine
-// In frontend The seller shouldn't have access to post prating
 
-
-// 4. View Product (All and Individual)
-// individual product
-app.get("/product/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const product = await pool.query("SELECT * FROM product where id = $1", [
-      id,
-    ]);
-    if (product.rowCount === 0) {
-      return res.status(401).json("Product not found");
-    }
-    res.json(product.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
 // get all products in category
 app.get("/products/:category", async (req, res) => {
   try {
@@ -102,7 +84,22 @@ app.get("/products/:category", async (req, res) => {
     console.error(err.message);
   }
 });
-
+// 4. View Product (All and Individual)
+// individual product
+app.get("/product/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await pool.query("SELECT * FROM product where id = $1", [
+      id,
+    ]);
+    if (product.rowCount === 0) {
+      return res.status(401).json("Product not found");
+    }
+    res.json(product.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 // @Low priority
 // 5. Update Product
