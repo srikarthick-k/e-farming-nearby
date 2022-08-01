@@ -35,4 +35,8 @@ CREATE TABLE product (
 -- Category;
 
 -- /category
-SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) > 1;
+SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) >= 1;
+
+
+-- /products/:category
+SELECT id, pname, price FROM product WHERE deliverylocation = 'kgf' AND category = 'fruit';
