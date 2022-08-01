@@ -28,8 +28,8 @@ function Login() {
       });
       const result = await response.json();
       console.log(result);
-      result === true
-        ? (window.location = "/post/product")
+      result
+        ? (window.location = `/category/${result.city}`)
         : alert("Login credentials are wrong!!!");
     } catch (err) {
       console.error(err.message);
