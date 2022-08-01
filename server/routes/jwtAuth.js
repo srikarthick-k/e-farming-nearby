@@ -52,7 +52,7 @@ router.post("/login", async (req, res) => {
         if(!isValidPassword){
             return res.status(401).json("Invalid Email")
         }
-        return res.json(true)
+        return res.status(200).json(checkEmailAvailablity.rows[0])
     } catch (err) {
         console.error(err.message);
     }
