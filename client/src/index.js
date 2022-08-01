@@ -18,7 +18,7 @@ root.render(
             <Route path="/nav" element={ <Navbar /> }/>
             <Route path="/register" element={ <Register /> } />
             <Route path="/post/product" element={ < Postproduct />}/>
-            <Route path="/category" element={ < Category />}  />
+            <Route path="/category/:deliverylocation" element={ < Category />}  />
         </Routes>
     </BrowserRouter>
   </React.StrictMode>
