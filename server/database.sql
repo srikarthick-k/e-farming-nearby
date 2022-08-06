@@ -28,7 +28,8 @@ CREATE TABLE product (
     description VARCHAR(500),
     deliverylocation VARCHAR(200),
     minquantity INT,
-    maxquantity INT
+    maxquantity INT,
+    sellerid VARCHAR(200)
 );
 
 
