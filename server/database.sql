@@ -41,3 +41,17 @@ SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVIN
 
 -- /products/:category
 SELECT id, pname, price FROM product WHERE deliverylocation = 'kgf' AND category = 'fruit';
+
+
+-- /from-orders/:uid
+CREATE TABLE orders(
+    sellerid varchar(200), 
+    customerid varchar(200), 
+    productid varchar(200), 
+    pname varchar(200), 
+    quantity int, 
+    price int, 
+    deliverycharge int,
+    city varchar(200), 
+    address varchat(300)
+);
