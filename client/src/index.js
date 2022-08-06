@@ -12,6 +12,10 @@ import Products from "./core/products";
 import Product from "./core/product";
 import Index from "./home";
 
+// Orders
+import FromOrder from "./core/orders/from-orders";
+import ToOrder from "./core/orders/to-orders";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -25,6 +29,8 @@ root.render(
             <Route path="/post/product/:uid" element={ < Postproduct />}/>
             <Route path="/products/:category/:deliverylocation/:uid" element={ < Products /> }/>
             <Route path="/product/:pid/:uid" element={ <Product /> }/>
+            <Route path="/from-orders/:uid" element={ < FromOrder/>} />
+            <Route path="/to-orders/:uid" element={ < ToOrder/>} />
         </Routes>
     </BrowserRouter>
   </React.StrictMode>
