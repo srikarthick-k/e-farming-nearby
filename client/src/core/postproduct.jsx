@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function Postproduct() {
 
@@ -11,6 +12,7 @@ function Postproduct() {
   const [deliverylocation, setdeliverylocation] = useState("");
   const [minquantity, setminquantity] = useState("");
   const [maxquantity, setmaxquantity] = useState("");
+  const { uid } = useParams()
 
   const pnameChange = (e) => {
     setpname(e.target.value);
@@ -48,7 +50,7 @@ function Postproduct() {
     e.preventDefault()
 
     try {
-      const body = {pname, category, unit, price, deliverycharge, description, deliverylocation, minquantity, maxquantity}
+      const body = {pname, category, unit, price, deliverycharge, description, deliverylocation, minquantity, maxquantity, uid}
       const response = await fetch("http://localhost:4000/product", {
         method:"POST",
         headers: { "Content-Type" : "application/json" },
@@ -57,7 +59,7 @@ function Postproduct() {
       console.log(body)
       const successfullUpload = await response.json()
       if(successfullUpload){
-        window.location = "/{Next page}"
+        window.location = `/category/${deliverylocation}/${uid}`
       }  
     } catch (err) {
       console.error(err.message);
