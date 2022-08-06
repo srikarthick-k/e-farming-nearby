@@ -25,8 +25,8 @@ router.post("/register", async (req, res) => {
         const bcryptPassword = await bcrypt.hash(password, salt)
 
         // Save to database 
-        const newAccount = await pool.query("INSERT INTO accounts(username, email, phone, city, password) values ($1, $2, $3, $4, $5)", [username, email, phone, city,  bcryptPassword])
-        res.json("Account successfully created")
+        const result = await pool.query("INSERT INTO accounts(username, email, phone, city, password) values ($1, $2, $3, $4, $5) RETURNING id", [username, email, phone, city,  bcryptPassword])
+        return res.json(result)
     } catch (err) {
         console.error(err.message);
     }
