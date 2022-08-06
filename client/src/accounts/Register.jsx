@@ -9,6 +9,7 @@ export default function Register() {
   const [city, setCity] = useState("");
   const [password, setPassword] = useState("");
 
+  
   const nameChange = (event) => {
     const userNameText = event.target.value.replace(/[^a-zA-Z ]/ig, "");
     setUsername(userNameText)
@@ -37,11 +38,14 @@ export default function Register() {
 
     try {
       const body = { username, email, phone, city, password };
-      await fetch("http://localhost:4000/auth/register", {
+      const result = await fetch("http://localhost:4000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
+      const userid = await result.json()
+      const id = userid.rows[0].id
+      result ? window.location= `/category/${city}/${id}` : alert("User details not saved")
     } catch (err) {
       console.error(err.message);
     }
@@ -128,11 +132,10 @@ export default function Register() {
         <div>
           <button 
           type="submit"
-          onClick={()=>window.location="/login"}
           >Submit</button>
         </div>
       </form>
-      Already Registered? <Link to={`/`}>Login</Link>
+      Already Registered? <Link to={"/login"}>Login</Link>
     </Fragment>
   );
 }
