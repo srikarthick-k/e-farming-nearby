@@ -9,7 +9,7 @@ app.use(express.json()); //used to access req.body
 
 // Routes
 app.use("/auth", require("./routes/jwtAuth"));
-// create an Account
+// Register Account or login
 
 //3. Post product
 app.post("/product", async (req, res) => {
@@ -19,26 +19,26 @@ app.post("/product", async (req, res) => {
       category,
       unit,
       price,
-      prating,
       deliverycharge,
       description,
       deliverylocation,
       minquantity,
       maxquantity,
+      uid
     } = req.body;
     const product = pool.query(
-      "INSERT INTO product(pname, category, unit, price, prating, deliverycharge, description, deliverylocation, minquantity, maxquantity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+      "INSERT INTO product(pname, category, unit, price, deliverycharge, description, deliverylocation, minquantity, maxquantity, sellerid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
       [
         pname,
         category,
         unit,
         price,
-        prating,
         deliverycharge,
         description,
         deliverylocation,
         minquantity,
         maxquantity,
+        uid,
       ]
     );
     res.json(true);
@@ -54,13 +54,12 @@ app.post("/product", async (req, res) => {
 app.get("/category/:deliverylocation", async (req, res) => {
   try {
     const { deliverylocation } = req.params;
-    console.log(req.params);
     const category = await pool.query(
       "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) >= 1;",
       [deliverylocation]
     );
     if (category.rowCount === 0) {
-      return res.status(404).json("No products available in current location");
+      return res.status(404).json(category.rows);
     }
     return res.json(category.rows);
   } catch (err) {
@@ -72,34 +71,49 @@ app.get("/category/:deliverylocation", async (req, res) => {
 app.get("/products/:category/:deliverylocation", async (req, res) => {
   try {
     const { category, deliverylocation } = req.params;
-    const product = await pool.query(
+    const products = await pool.query(
       "SELECT * FROM product WHERE deliverylocation = $1 AND category = $2;",
       [deliverylocation, category]
     );
-    if (product.rowCount === 0) {
+    if (products.rowCount === 0) {
       return res.status(401).json("No products in category");
     }
-    return res.json(product.rows);
+    return res.json(products.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
 // 4. View Product (All and Individual)
 // individual product
-app.get("/product/:id", async (req, res) => {
+app.get("/product/:pid", async (req, res) => {
   try {
-    const { id } = req.params;
+    const { pid } = req.params;
     const product = await pool.query("SELECT * FROM product where id = $1", [
-      id,
+      pid,
     ]);
     if (product.rowCount === 0) {
       return res.status(401).json("Product not found");
     }
-    res.json(product.rows[0]);
+    return res.json(product.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
 });
+
+
+// Place Order
+app.post("/order", async(req, res)=>{
+  try {
+    const {pid, uid, qty, price, address} = req.body;
+    const seller = await pool.query("SELECT sellerid, deliverylocation FROM product WHERE id=$1", [pid])
+    const order = await pool.query("INSERT INTO ORDERS (sellerid, customerid, productid, quantity, price, city, address) VALUES ($1, $2, $3, $4, $5, $6, $7)", [ seller.rows[0].sellerid, uid, pid, qty, price, seller.rows[0].deliverylocation, address])
+    return res.json(true);
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
+
 
 // @Low priority
 // 5. Update Product
