@@ -29,7 +29,7 @@ function Login() {
       const result = await response.json();
       console.log(result);
       result
-        ? (window.location = `/category/${result.city}`)
+        ? (window.location = `/category/${result.city}/${result.id}`)
         : alert("Login credentials are wrong!!!");
     } catch (err) {
       console.error(err.message);
