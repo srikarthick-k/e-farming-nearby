@@ -67,7 +67,8 @@ function Category() {
         <Link to={`/post/product/${uid}`}>
           <h4>Post product</h4>
         </Link>
-        <Link to={`/orders/${uid}`}><h4>View Orders</h4></Link>
+        <Link to={`/from-orders/${uid}`}><h4>Orders from you</h4></Link>
+        <Link to={`/to-orders/${uid}`}><h4>Orders to you</h4></Link>
         <h1>Products: </h1>
         {categories[0] ? (
           <CategoriesRender />
