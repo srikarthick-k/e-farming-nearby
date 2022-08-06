@@ -24,7 +24,7 @@ app.post("/product", async (req, res) => {
       deliverylocation,
       minquantity,
       maxquantity,
-      uid
+      uid,
     } = req.body;
     const product = pool.query(
       "INSERT INTO product(pname, category, unit, price, deliverycharge, description, deliverylocation, minquantity, maxquantity, sellerid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
@@ -100,20 +100,51 @@ app.get("/product/:pid", async (req, res) => {
   }
 });
 
-
 // Place Order
-app.post("/order", async(req, res)=>{
+app.post("/order", async (req, res) => {
   try {
-    const {pid, uid, qty, price, address} = req.body;
-    const seller = await pool.query("SELECT sellerid, deliverylocation FROM product WHERE id=$1", [pid])
-    const order = await pool.query("INSERT INTO ORDERS (sellerid, customerid, productid, quantity, price, city, address) VALUES ($1, $2, $3, $4, $5, $6, $7)", [ seller.rows[0].sellerid, uid, pid, qty, price, seller.rows[0].deliverylocation, address])
+    const { pid, uid, qty, price, address } = req.body;
+    const seller = await pool.query(
+      "SELECT sellerid, deliverylocation, pname, deliverycharge FROM product WHERE id=$1",
+      [pid]
+    );
+    const order = await pool.query(
+      "INSERT INTO ORDERS (sellerid, customerid, productid, pname, quantity, price, deliverycharge, city, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+      [
+        seller.rows[0].sellerid,
+        uid,
+        pid,
+        seller.rows[0].pname,
+        qty,
+        price,
+        seller.rows[0].deliverycharge,
+        seller.rows[0].deliverylocation,
+        address,
+      ]
+    );
     return res.json(true);
   } catch (err) {
     console.error(err.message);
   }
-})
+});
 
-
+// Display orders in customer side (cid)
+app.get("/from-orders/:uid", async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const order = await pool.query(
+      "SELECT * FROM ORDERS WHERE customerid = $1",
+      [uid]
+    );
+    // const product = await pool.query(
+    //   "SELECT * FROM product WHERE sellerid = $1",
+    //   [order.rows[0].sellerid]
+    // );
+    return res.json(order.rows)
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 // @Low priority
 // 5. Update Product
