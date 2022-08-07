@@ -1,6 +1,13 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import Category from "../core/category";
+
+// CSS
+import "../style.css"
+
+// MUI
+import { TextField } from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import { Button } from "@mui/material";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -27,8 +34,8 @@ function Login() {
         body: JSON.stringify(body),
       });
       const result = await response.json();
-      console.log(result);
-      result
+      console.log(response.status);
+      response.status === 200
         ? (window.location = `/category/${result.city}/${result.id}`)
         : alert("Login credentials are wrong!!!");
     } catch (err) {
@@ -38,31 +45,43 @@ function Login() {
 
   return (
     <Fragment>
-      <form onSubmit={onSubmitLogin}>
-        <h1>Login</h1>
-        <div>
-          <input
-            type="text"
-            placeholder="email"
-            value={email}
-            onChange={emailChange}
-          />
-        </div>
-        <br />
-        <div>
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={passwordChange}
-          />
-        </div>
-        <br />
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
-      New User? <Link to={`/register`}>Register</Link>
+      <center>
+        <form onSubmit={onSubmitLogin}>
+          <h1>Login</h1>
+          <div>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Email address"
+              type="text"
+              value={email}
+              onChange={emailChange}
+              maxLength={50}
+              sx={{ m: 2 }}
+            />
+          </div>
+          <br />
+          <div>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Password"
+              type="password"
+              value={password}
+              onChange={passwordChange}
+              maxLength={255}
+              sx={{ m: 2 }}
+            />
+          </div>
+          <br />
+          <div>
+            <Button variant="outlined" type="submit" sx={{ m: 2 }}>
+              SUBMIT
+            </Button>
+          </div>
+        </form>
+        New User? <Link to={`/register`} className="links">Register</Link>
+      </center>
     </Fragment>
   );
 }
