@@ -1,7 +1,30 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 
-function Navbar(){
-    return <h2>navigation here</h2>
+// CSS
+import "../style.css";
+
+function Navbar(props) {
+  const uid = props.uid;
+  const deliverylocation1 = props.deliverylocation;
+  return (
+    <Fragment>
+      <div className="navigation">
+        <Link to={`/post/product/${uid}`}>
+          <h4 className="links">Post product</h4>
+        </Link>
+        <Link to={`/from-orders/${uid}`}>
+          <h4 className="links">Orders from you</h4>
+        </Link>
+        <Link to={`/to-orders/${uid}`}>
+          <h4 className="links">Orders to you</h4>
+        </Link>
+        <Link to={`/category/${deliverylocation1}/${uid}`}>
+          <h4 className="links">Home</h4>
+        </Link>
+      </div>
+    </Fragment>
+  );
 }
 
-export default Navbar
+export default Navbar;
