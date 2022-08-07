@@ -1,0 +1,24 @@
+.links{
+    color: aqua;
+}
+
+.links:hover{
+    cursor: pointer;
+}
+
+.navigation{
+    background-color: green;
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0px;
+}
+
+.navigation > a{
+    padding: 20px;
+    background-color: black;
+    text-decoration: none;
+}
+
+.navigation > a:hover{
+    background-color: green;
+}
