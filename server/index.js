@@ -11,6 +11,15 @@ app.use(express.json()); //used to access req.body
 app.use("/auth", require("./routes/jwtAuth"));
 // Register Account or login
 
+app.get("/districts", async (req, res) => {
+  try {
+    const districts = await pool.query("SELECT * FROM DISTRICTS")
+    return res.json(districts.rows)
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //3. Post product
 app.post("/product", async (req, res) => {
   try {
@@ -104,21 +113,31 @@ app.get("/product/:pid", async (req, res) => {
 app.post("/order", async (req, res) => {
   try {
     const { pid, uid, qty, price, address } = req.body;
-    const seller = await pool.query(
+    const product = await pool.query(
       "SELECT sellerid, deliverylocation, pname, deliverycharge FROM product WHERE id=$1",
       [pid]
     );
+    const seller = await pool.query(
+      "SELECT username from accounts where id = $1",
+      [product.rows[0].sellerid]
+    );
+    const customer = await pool.query(
+      "SELECT username from accounts where id = $1",
+      [uid]
+    );
     const order = await pool.query(
-      "INSERT INTO ORDERS (sellerid, customerid, productid, pname, quantity, price, deliverycharge, city, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+      "INSERT INTO ORDERS (sellerid, customerid, productid, cname, sname, pname, quantity, price, deliverycharge, city, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
       [
-        seller.rows[0].sellerid,
+        product.rows[0].sellerid,
         uid,
         pid,
-        seller.rows[0].pname,
+        customer.rows[0].username,
+        seller.rows[0].username,
+        product.rows[0].pname,
         qty,
         price,
-        seller.rows[0].deliverycharge,
-        seller.rows[0].deliverylocation,
+        product.rows[0].deliverycharge,
+        product.rows[0].deliverylocation,
         address,
       ]
     );
@@ -136,11 +155,19 @@ app.get("/from-orders/:uid", async (req, res) => {
       "SELECT * FROM ORDERS WHERE customerid = $1",
       [uid]
     );
-    // const product = await pool.query(
-    //   "SELECT * FROM product WHERE sellerid = $1",
-    //   [order.rows[0].sellerid]
-    // );
-    return res.json(order.rows)
+    return res.json(order.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/to-orders/:uid", async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const order = await pool.query("SELECT * FROM ORDERS WHERE sellerid = $1", [
+      uid,
+    ]);
+    return res.json(order.rows);
   } catch (err) {
     console.error(err.message);
   }
