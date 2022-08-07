@@ -45,13 +45,15 @@ SELECT id, pname, price FROM product WHERE deliverylocation = 'kgf' AND category
 
 -- /from-orders/:uid
 CREATE TABLE orders(
-    sellerid varchar(200), 
-    customerid varchar(200), 
-    productid varchar(200), 
-    pname varchar(200), 
+    sellerid VARCHAR(200), 
+    customerid VARCHAR(200), 
+    productid VARCHAR(200),
+    cname VARCHAR(100),
+    sname VARCHAR(100),
+    pname VARCHAR(200), 
     quantity int, 
     price int, 
     deliverycharge int,
-    city varchar(200), 
-    address varchat(300)
+    city VARCHAR(200), 
+    address VARCHAR(300)
 );
