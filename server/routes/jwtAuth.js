@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
         // check for email in DB (if not present throw an error code)
         const checkEmailAvailablity = await pool.query("select * from accounts where email = $1", [email])
         if(checkEmailAvailablity.rowCount === 0){
-            return res.json("email not found ")
+            return res.status(401).json("email not found ")
         }
 
         // check for valid password by comparing encrypted password (in DB) with non-encrypted password (in req.json) 
