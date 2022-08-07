@@ -26,43 +26,41 @@ const FromOrder = () => {
     <Fragment>
       <center>
         <h1>From Orders</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Product-Name |</th>
-              <th>Quantity |</th>
-              <th>Total-Price |</th>
-              <th>City |</th>
-              <th>Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Do backend design and comeback */}
-            {orders.map((order) => (
-              <tr key={order.productid}>
-                <td>{order.pname}</td>
-                <td>{order.quantity}</td>
-                <td>{order.quantity * order.price + order.deliverycharge}</td>
-                <td>{order.city}</td>
-                <td>{order.address}</td>
+
+        {orders[0] ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Seller-Name |</th>
+                <th>Product-Name |</th>
+                <th>Quantity |</th>
+                <th>Total-Price |</th>
+                <th>City |</th>
+                <th>Address</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order.productid}>
+                  <td>{order.sname}</td>
+                  <td>{order.pname}</td>
+                  <td>{order.quantity}</td>
+                  <td>{order.quantity * order.price + order.deliverycharge}</td>
+                  <td>{order.city}</td>
+                  <td>{order.address}</td>
+                  <td>
+                    <button>Update</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <h1>No orders shop more</h1>
+        )}
       </center>
-      {/* <button>Update</button> */}
     </Fragment>
   );
 };
 
 export default FromOrder;
-
-{
-  /* qty from order */
-}
-{
-  /* price from product */
-}
-{
-  /* dcharge from product */
-}
