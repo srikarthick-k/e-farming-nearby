@@ -1,38 +1,53 @@
-import React, { Fragment, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export default function Register() {
+//CSS
+import "../style.css";
 
+// MUI:
+import { TextField } from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { Button } from "@mui/material";
+//Theme
+
+export default function Register() {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
   const [password, setPassword] = useState("");
+  const [districts, setDistricts] = useState([]);
 
-  
   const nameChange = (event) => {
-    const userNameText = event.target.value.replace(/[^a-zA-Z ]/ig, "");
-    setUsername(userNameText)
-  }
-  
+    const userNameText = event.target.value.replace(/[^a-zA-Z ]/gi, "");
+    setUsername(userNameText);
+  };
+
   const emailChange = (event) => {
-    const userEmailText = event.target.value.replace(/"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"/, "");
-    setEmail(userEmailText)
-  }  
-  
+    const userEmailText = event.target.value.replace(
+      /"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"/,
+      ""
+    );
+    setEmail(userEmailText);
+  };
+
   const onlyNumbers = (event) => {
     const result = event.target.value.replace(/\D/g, "");
     setPhone(result);
   };
-  
+
   const cityChange = (event) => {
-    const userCityText = event.target.value.replace(/[^a-zA-Z ]/ig, "");
-    setCity(userCityText)
-  }
+    const userCityText = event.target.value.replace(/[^a-zA-Z ]/gi, "");
+    setCity(userCityText);
+  };
 
   const passwordChange = (event) => {
-    setPassword(event.target.value)
-  }
+    setPassword(event.target.value);
+  };
   const onSubmitRegister = async (e) => {
     e.preventDefault();
 
@@ -41,101 +56,136 @@ export default function Register() {
       const result = await fetch("http://localhost:4000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
-      const userid = await result.json()
-      const id = userid.rows[0].id
-      result ? window.location= `/category/${city}/${id}` : alert("User details not saved")
+      const userid = await result.json();
+      const id = userid.rows[0].id;
+      result
+        ? (window.location = `/category/${city}/${id}`)
+        : alert("User details not saved");
     } catch (err) {
       console.error(err.message);
     }
   };
-  // @ValuesInDB:
-  /* 1. username
-     2. email
-     3. phone
-     4. city
-     5. password
-     6. confirm password
-  */
+  const districtsRender = async () => {
+    try {
+      const district = await fetch("http://localhost:4000/districts");
+      const response = await district.json();
+      setDistricts(response);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    districtsRender();
+  }, []);
 
   return (
-    <Fragment>
+    <center>
+      <h1>Register</h1>
       <form onSubmit={onSubmitRegister} className="registerForm">
         {/* username */}
         <div>
-          <label htmlFor="uname">Full Name: </label>
-          <input 
-          type="text" 
-          maxLength={30} 
-          id="uname" 
-          value={username}
-          onChange={nameChange}
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            label="Full Name:"
+            type="text"
+            inputProps={{ maxLength: 50 }}
+            value={username}
+            onChange={nameChange}
+            sx={{ m: 2 }}
           />
         </div>
 
         {/* email */}
         <div>
-          <label htmlFor="email">E-mail Address: </label>
-          <input
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            label="Email Address"
             type="text"
             placeholder="gmail, protonmain, outlook, etc.,"
-            maxLength={50}
-            id="email"
+            inputProps={{ maxLength: 50 }}
             value={email}
             onChange={emailChange}
+            sx={{ m: 2 }}
           />
         </div>
 
         {/* phone */}
         <div>
-          <label htmlFor="mobile">Mobile Number: </label>
-          <input
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            label="Mobile"
             type="text"
             placeholder="(+91)"
             value={phone}
             onChange={onlyNumbers}
-            maxLength={10}
-            id="mobile"
+            inputProps={{ maxLength: 12 }}
+            sx={{ m: 2 }}
           />
         </div>
 
         {/* city */}
         <div>
-          <label htmlFor="city">City: </label>
-          <input 
-          typeof="text" 
-          maxLength={30} 
-          id="city" 
-          value={city}
-          onChange={cityChange} 
-          />
+          <FormControl sx={{ m: 2, minWidth: 150 }}>
+            <InputLabel id="demo-simple-select-helper-label">
+              District
+            </InputLabel>
+            <Select value={city} label="District" onChange={cityChange}>
+              <MenuItem value="">Not Selected</MenuItem>
+              {districts.map((district) => (
+                <MenuItem value={district.dname} key={district.id}>
+                  {district.dname}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>
+              Helpful in determining Your delivery location
+            </FormHelperText>
+          </FormControl>
         </div>
         {/* password */}
         <div>
-          <label htmlFor="password">Password: </label>
-          <input 
-          type="password" 
-          maxLength={20} 
-          id="password" 
-          value={password} 
-          onChange={passwordChange}
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            label="password"
+            type="password"
+            maxLength={255}
+            inputProps={{ maxLength: 255 }}
+            value={password}
+            onChange={passwordChange}
+            sx={{ m: 2 }}
           />
         </div>
 
         {/* confirm password */}
         <div>
-          <label htmlFor="cpassword">Confirm Password: </label>
-          <input type="password" maxLength={20} id="cpassword" />
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            label="Confirm Password:"
+            type="password"
+            inputProps={{ maxLength: 255 }}
+            sx={{ m: 2 }}
+          />
         </div>
 
         <div>
-          <button 
-          type="submit"
-          >Submit</button>
+          {/* <button type="submit">Submit</button> */}
+          <Button variant="outlined" type="submit" sx={{ m: 2 }}>
+            SUBMIT
+          </Button>
         </div>
       </form>
-      Already Registered? <Link to={"/login"}>Login</Link>
-    </Fragment>
+      Already Registered?{" "}
+      <Link to={"/login"} className="links">
+        Login
+      </Link>
+    </center>
   );
 }
