@@ -1,8 +1,12 @@
 import React, { Fragment, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function Postproduct() {
+// MUI
+import { TextField } from "@mui/material";
+import { Button } from "@mui/material";
 
+
+function Postproduct() {
   const [pname, setpname] = useState("");
   const [category, setcategory] = useState("");
   const [unit, setunit] = useState("");
@@ -12,7 +16,7 @@ function Postproduct() {
   const [deliverylocation, setdeliverylocation] = useState("");
   const [minquantity, setminquantity] = useState("");
   const [maxquantity, setmaxquantity] = useState("");
-  const { uid } = useParams()
+  const { uid } = useParams();
 
   const pnameChange = (e) => {
     setpname(e.target.value);
@@ -47,24 +51,34 @@ function Postproduct() {
   };
 
   const onSubmitPostProduct = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      const body = {pname, category, unit, price, deliverycharge, description, deliverylocation, minquantity, maxquantity, uid}
+      const body = {
+        pname,
+        category,
+        unit,
+        price,
+        deliverycharge,
+        description,
+        deliverylocation,
+        minquantity,
+        maxquantity,
+        uid,
+      };
       const response = await fetch("http://localhost:4000/product", {
-        method:"POST",
-        headers: { "Content-Type" : "application/json" },
-        body : JSON.stringify(body)
-      })
-      console.log(body)
-      const successfullUpload = await response.json()
-      if(successfullUpload){
-        window.location = `/category/${deliverylocation}/${uid}`
-      }  
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      console.log(body);
+      const successfullUpload = await response.json();
+      if (successfullUpload) {
+        window.location = `/category/${deliverylocation}/${uid}`;
+      }
     } catch (err) {
       console.error(err.message);
     }
-
   };
 
   return (
@@ -73,9 +87,11 @@ function Postproduct() {
         <h1>Post product</h1>
         <form onSubmit={onSubmitPostProduct}>
           <div>
-            <input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Product Name"
               type="text"
-              placeholder="Product Name"
               maxLength={30}
               value={pname}
               onChange={pnameChange}
@@ -94,17 +110,22 @@ function Postproduct() {
           </div>
           <br />
           <div>
-            <input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Unit"
               type="text"
-              placeholder="Unit"
-              maxLength={30}
+              maxLength={20}
               value={unit}
               onChange={unitChange}
             />
           </div>
           <br />
           <div>
-            <input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Price"
               type="text"
               placeholder="Price"
               maxLength={30}
@@ -115,7 +136,10 @@ function Postproduct() {
           </div>
           <br />
           <div>
-            <input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Delivery Charge"
               type="text"
               placeholder="Delivery Charge"
               maxLength={30}
@@ -131,6 +155,7 @@ function Postproduct() {
               placeholder="Description"
               value={description}
               onChange={descriptionChange}
+              maxLength={500}
             ></textarea>
           </div>
           <br />
@@ -145,7 +170,10 @@ function Postproduct() {
           </div>
           <br />
           <div>
-            <input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Minimum Quantity"
               type="text"
               placeholder="Minimum Quantity"
               maxLength={30}
@@ -156,7 +184,10 @@ function Postproduct() {
           </div>
           <br />
           <div>
-            <input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Maximum Quantity"
               type="text"
               placeholder="Maximum Quantity"
               maxLength={30}
@@ -167,7 +198,9 @@ function Postproduct() {
           </div>
           <br />
           <div>
-            <button type="submit">Submit</button>
+          <Button variant="outlined" type="submit" sx={{ m: 2 }}>
+            SUBMIT
+          </Button>
           </div>
         </form>
       </center>
