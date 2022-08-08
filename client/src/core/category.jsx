@@ -1,7 +1,6 @@
 //** @TODO On next version 2.0 of this app I'm gonna include the option where user can search for available categories in that location. When they select the option from list of locations, the url parameter changes as well
 
 import React, { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Button } from "@mui/material";
@@ -47,7 +46,7 @@ function Category() {
   return (
     <Fragment>
       <div>
-        <Navbar uid={uid} deliverylocation1={deliverylocation}/>
+        <Navbar uid={uid} deliverylocation={deliverylocation}/>
         <h1>Categories: </h1>
         {categories[0] ? (
           <CategoriesRender />
