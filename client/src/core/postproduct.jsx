@@ -10,6 +10,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
+import Navbar from "../components/Navbar";
 
 function Postproduct() {
   const [pname, setpname] = useState("");
@@ -24,6 +25,8 @@ function Postproduct() {
   const [minquantity, setminquantity] = useState("");
   const [maxquantity, setmaxquantity] = useState("");
   const { uid } = useParams();
+  const [city, setCity] = useState("")
+
 
   const pnameChange = (e) => {
     setpname(e.target.value);
@@ -71,10 +74,20 @@ function Postproduct() {
       console.error(err.message);
     }
   };
+  const getDefaultCity = async() =>{
+    try {
+      const response = await fetch(`http://localhost:4000/userinfo/${uid}`)
+      const jsonData = await response.json();
+      setCity(jsonData[0].city)
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
 
   useEffect(() => {
     categorySelect();
     districtsRender();
+    getDefaultCity();
   }, []);
 
   const onSubmitPostProduct = async (e) => {
@@ -110,6 +123,7 @@ function Postproduct() {
 
   return (
     <Fragment>
+      <Navbar uid={uid} deliverylocation={city}/>
       <center>
         <h1>Post product</h1>
         <form onSubmit={onSubmitPostProduct}>
