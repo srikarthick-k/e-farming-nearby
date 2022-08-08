@@ -13,12 +13,35 @@ app.use("/auth", require("./routes/jwtAuth"));
 
 app.get("/districts", async (req, res) => {
   try {
-    const districts = await pool.query("SELECT * FROM DISTRICTS")
-    return res.json(districts.rows)
+    const districts = await pool.query("SELECT * FROM DISTRICTS");
+    return res.json(districts.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
+
+app.get("/userinfo/:uid", async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const info = await pool.query(
+      "SELECT city from accounts where id = $1",
+      [uid]
+    );
+    return res.json(info.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.delete("deleteorder/:orderid", async(req, res)=>{
+  try {
+    const {orderid} = req.params;
+     await pool.query("DELETE FROM orders WHERE orderid = $1", [orderid]); 
+     res.json("Successfully deleted")
+  } catch (err) {
+    console.error(err.message);
+  }
+})
 
 //3. Post product
 app.post("/product", async (req, res) => {
@@ -76,14 +99,14 @@ app.get("/category/:deliverylocation", async (req, res) => {
   }
 });
 
-app.get("/categoryselect", async(req,res)=>{
+app.get("/categoryselect", async (req, res) => {
   try {
-    const catType = await pool.query("SELECT * FROM category")
-    return res.json(catType.rows)
+    const catType = await pool.query("SELECT * FROM category");
+    return res.json(catType.rows);
   } catch (err) {
     console.error(err.message);
   }
-})
+});
 
 // get all products in category
 app.get("/products/:category/:deliverylocation", async (req, res) => {
@@ -181,44 +204,6 @@ app.get("/to-orders/:uid", async (req, res) => {
     console.error(err.message);
   }
 });
-
-// @Low priority
-// 5. Update Product
-// 6. Delete Product
-
-// Reference
-
-// // get a todo
-// app.get("/todo/:id", async(req,res)=>{
-//     try {
-//         const {id} = req.params
-//         const printodo = await pool.query("SELECT *FROM todo WHERE id=$1", [id])
-//         res.json(printodo.rows)
-//     } catch (err) {
-//         console.error(err.message);
-//     }
-// })
-// // update a todo
-// app.put("/todo/:id", async(req, res)=>{
-//     const {id} = req.params
-//     const {descript} = req.body
-//     try {
-//         await pool.query("UPDATE todo SET descript=$1 WHERE id=$2", [descript, id])
-//         res.json("Successfully Updated")
-//     } catch (err) {
-//         console.error(err.message);
-//     }
-// })
-// // delete a todo
-// app.delete("/todo/:id", async(req, res)=>{
-//     const {id} = req.params;
-//     try {
-//          await pool.query("DELETE FROM todo WHERE id = $1", [id])
-//         res.json("Successfully Deleted")
-//     } catch (err) {
-//         console.error(err.message);
-//     }
-// })
 
 app.listen(4000, () => {
   console.log("server started at port 4000");
