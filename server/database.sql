@@ -57,3 +57,8 @@ CREATE TABLE orders(
     city VARCHAR(200), 
     address VARCHAR(300)
 );
+
+create table category(
+    id serial primary key,
+    catname varchar(50)
+);
