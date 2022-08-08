@@ -76,6 +76,15 @@ app.get("/category/:deliverylocation", async (req, res) => {
   }
 });
 
+app.get("/categoryselect", async(req,res)=>{
+  try {
+    const catType = await pool.query("SELECT * FROM category")
+    return res.json(catType.rows)
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
 // get all products in category
 app.get("/products/:category/:deliverylocation", async (req, res) => {
   try {
