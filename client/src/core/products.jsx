@@ -10,6 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Navbar from "../components/Navbar";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -36,11 +37,10 @@ const Products = () => {
   return (
     <Fragment>
       {/* <center> */}
+      <Navbar uid={uid} deliverylocation={deliverylocation}/>
       <center><h1>Products</h1></center>
       <TableContainer component={Paper}>
-        <Table 
-        
-        >
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>Product Name</TableCell>
@@ -53,7 +53,7 @@ const Products = () => {
           </TableHead>
           <TableBody>
             {products.map((prod) => (
-              <tr
+              <TableRow
               className="trow"
               hover={true}
                 key={prod.id}
@@ -67,8 +67,7 @@ const Products = () => {
                 <TableCell>{prod.minquantity}</TableCell>
                 <TableCell>{prod.deliverycharge}</TableCell>
                 <TableCell>{prod.price + prod.deliverycharge}</TableCell>
-                <TableCell></TableCell>
-              </tr>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
