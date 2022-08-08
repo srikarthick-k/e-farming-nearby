@@ -22,3 +22,13 @@
 .navigation > a:hover{
     background-color: green;
 }
+
+.buyQ{
+    border: 1px solid aqua;
+    display: inline-block;
+}
+
+.trow:hover{
+    background-color: black;
+    cursor:pointer;
+}
