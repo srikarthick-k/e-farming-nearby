@@ -1,5 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+// CSS
+import "../style.css"
+
+// MUI
+import { TextareaAutosize } from "@mui/material";
+import {Button} from "@mui/material";
 
 const Product = () => {
   const [product, setProduct] = useState([]);
@@ -48,52 +54,61 @@ const Product = () => {
   // Render the data in card style
   return (
     <Fragment>
-      <p>Name: {product.pname}</p>
-      <p>Category: {product.category}</p>
-      <p>Delivery City: {product.deliverylocation} </p>
+      <center>
+      <h1>Product Info</h1>
+      <p><b>Name: </b>{product.pname}</p>
+      <p><b>Category: </b>{product.category}</p>
+      <p><b>Delivery City: </b>{product.deliverylocation} </p>
       <p>
-        Content: {product.minquantity} {product.unit} / Rs. {product.price}
+      <b>Content: </b>{product.minquantity} {product.unit} / Rs. {product.price}
       </p>
-      <p>Buy Quantity: {qty}</p>
-      <button
+      <div className="buyQ">
+
+      <p><b>Buy Quantity: </b>{qty}</p>
+      <Button
         onClick={() => {
           if (qty < product.maxquantity / product.minquantity) {
             setQuantity(qty + 1);
           }
         }}
-      >
-        +
-      </button>
-      <button
+        >
+        <h1>+</h1>
+      </Button>
+      <Button
         onClick={() => {
           if (qty > 0) {
             setQuantity(qty - 1);
           }
         }}
-      >
-        -
-      </button>
-      <p>Delivery Charge: Rs.{product.deliverycharge}</p>
+        >
+        <h1>-</h1>
+      </Button>
+          </div>
+      <p><b>Delivery Charge: </b>Rs.{product.deliverycharge}</p>
       <p>
-        Total Price:
+      <b>Total Price:</b>
         {qty > 0 ? price * qty + product.deliverycharge : "ZERO"}
       </p>
       <div>
-        <textarea
+        <TextareaAutosize
+          minRows={9}
+          style={{ width: 200 }}
           cols="30"
           rows="10"
           placeholder="Address to be delivered"
           value={address}
           onChange={addressChange}
-        />
+          />
       </div>
-      <button
+      <Button
         onClick={() => {
           onPlaceOrder();
         }}
-      >
+        variant="contained"
+        >
         PlaceOrder
-      </button>
+      </Button>
+        </center>
     </Fragment>
   );
 };
