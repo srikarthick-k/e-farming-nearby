@@ -1,19 +1,26 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 // MUI
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
-
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
 
 function Postproduct() {
   const [pname, setpname] = useState("");
   const [category, setcategory] = useState("");
+  const [categories, setcategories] = useState([]);
   const [unit, setunit] = useState("");
   const [price, setprice] = useState("");
   const [deliverycharge, setdeliverycharge] = useState("");
   const [description, setdescription] = useState("");
   const [deliverylocation, setdeliverylocation] = useState("");
+  const [districts, setDistricts] = useState([])
   const [minquantity, setminquantity] = useState("");
   const [maxquantity, setmaxquantity] = useState("");
   const { uid } = useParams();
@@ -49,6 +56,26 @@ function Postproduct() {
     const result = e.target.value.replace(/\D/g, "");
     setmaxquantity(result);
   };
+
+  const categorySelect = async () => {
+    const result = await fetch("http://localhost:4000/categoryselect");
+    const jsonData = await result.json();
+    setcategories(jsonData);
+  };
+  const districtsRender = async () => {
+    try {
+      const district = await fetch("http://localhost:4000/districts");
+      const response = await district.json();
+      setDistricts(response);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    categorySelect();
+    districtsRender();
+  }, []);
 
   const onSubmitPostProduct = async (e) => {
     e.preventDefault();
@@ -96,17 +123,27 @@ function Postproduct() {
               value={pname}
               onChange={pnameChange}
             />
-            {/* */}
+            {/*  */}
           </div>
           <br />
           <div>
-            <select value={category} onChange={categoryChange}>
-              <option value="">Not selected</option>
-              <option value="fruit">Fruits</option>
-              <option value="vegetable">Vegetables</option>
-              <option value="seed">Seeds</option>
-              <option value="green">Green Leaves</option>
-            </select>
+            <FormControl sx={{ m: 2, minWidth: 150 }}>
+              <InputLabel id="demo-simple-select-helper-label">
+                Category
+              </InputLabel>
+              <Select
+                value={category}
+                label="Category"
+                onChange={categoryChange}
+              >
+                <MenuItem value="">Not Selected</MenuItem>
+                {categories.map((cat) => (
+                  <MenuItem value={cat.catname} key={cat.id}>
+                    {cat.catname}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
           <br />
           <div>
@@ -149,24 +186,34 @@ function Postproduct() {
           </div>
           <br />
           <div>
-            <textarea
-              cols="30"
-              rows="10"
+            <TextareaAutosize
+              minRows={4}
               placeholder="Description"
+              style={{ width: 200 }}
               value={description}
               onChange={descriptionChange}
               maxLength={500}
-            ></textarea>
+
+            />
           </div>
           <br />
           <div>
-            <select value={deliverylocation} onChange={deliverylocationChange}>
-              <option value="">Not selected</option>
-              <option value="bangarpet">Bangarpet</option>
-              <option value="kgf">KGF</option>
-              <option value="bengaluru">Bengaluru</option>
-              <option value="kolar">Kolar</option>
-            </select>
+            <FormControl sx={{ m: 2, minWidth: 150 }}>
+            <InputLabel id="demo-simple-select-helper-label">
+              District
+            </InputLabel>
+            <Select value={deliverylocation} label="District" onChange={deliverylocationChange}>
+              <MenuItem value="">Not Selected</MenuItem>
+              {districts.map((district) => (
+                <MenuItem value={district.dname} key={district.id}>
+                  {district.dname}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>
+              Select a district where you can deliver this product
+            </FormHelperText>
+          </FormControl>
           </div>
           <br />
           <div>
@@ -198,9 +245,9 @@ function Postproduct() {
           </div>
           <br />
           <div>
-          <Button variant="outlined" type="submit" sx={{ m: 2 }}>
-            SUBMIT
-          </Button>
+            <Button variant="outlined" type="submit" sx={{ m: 2 }}>
+              SUBMIT
+            </Button>
           </div>
         </form>
       </center>
