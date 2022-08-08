@@ -4,6 +4,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { Button } from "@mui/material";
 
 function Category() {
   const { deliverylocation } = useParams();
@@ -30,14 +31,15 @@ function Category() {
     return (
       <ul>
         {categories.map((cat) => (
-          <button
+          <Button
             key={cat.category}
             onClick={() =>
               (window.location = `/products/${cat.category}/${deliverylocation}/${uid}`)
             }
-          >
+            variant="outlined"
+          pill>
             {cat.category}
-          </button>
+          </Button>
         ))}
       </ul>
     );
