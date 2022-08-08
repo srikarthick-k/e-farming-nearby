@@ -1,5 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+// CSS
+import "../style.css"
+// MUI
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -25,36 +35,45 @@ const Products = () => {
 
   return (
     <Fragment>
-      <center>
-        <table>
-          <thead>
-            <tr>
-              <th>Product Name</th>
-              <th>Price</th>
-              <th>Delivery Charge</th>
-              <th>Delivery location</th>
-              <th>Total Price</th>
-            </tr>
-          </thead>
-          <tbody>
+      {/* <center> */}
+      <center><h1>Products</h1></center>
+      <TableContainer component={Paper}>
+        <Table 
+        
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>Product Name</TableCell>
+              <TableCell>Delivery location</TableCell>
+              <TableCell>Price per / </TableCell>
+              <TableCell>Minimum Quantity</TableCell>
+              <TableCell>Delivery Charge</TableCell>
+              <TableCell>Total Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {products.map((prod) => (
               <tr
+              className="trow"
+              hover={true}
                 key={prod.id}
                 onClick={() => {
                   window.location = `/product/${prod.id}/${uid}`;
                 }}
               >
-                <td>{prod.pname}</td>
-                <td>{prod.price}</td>
-                <td>{prod.deliverycharge}</td>
-                <td>{prod.deliverylocation}</td>
-                <td>{prod.price + prod.deliverycharge}</td>
-                <td></td>
+                <TableCell>{prod.pname}</TableCell>
+                <TableCell>{prod.deliverylocation}</TableCell>
+                <TableCell>{prod.price}</TableCell>
+                <TableCell>{prod.minquantity}</TableCell>
+                <TableCell>{prod.deliverycharge}</TableCell>
+                <TableCell>{prod.price + prod.deliverycharge}</TableCell>
+                <TableCell></TableCell>
               </tr>
             ))}
-          </tbody>
-        </table>
-      </center>
+          </TableBody>
+        </Table>
+        </TableContainer>
+      {/* </center> */}
     </Fragment>
   );
 };
