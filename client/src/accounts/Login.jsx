@@ -6,7 +6,6 @@ import "../style.css"
 
 // MUI
 import { TextField } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
 import { Button } from "@mui/material";
 
 function Login() {
