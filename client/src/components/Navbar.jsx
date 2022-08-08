@@ -6,7 +6,7 @@ import "../style.css";
 
 function Navbar(props) {
   const uid = props.uid;
-  const deliverylocation1 = props.deliverylocation;
+  const deliverylocation = props.deliverylocation;
   return (
     <Fragment>
       <div className="navigation">
@@ -19,7 +19,7 @@ function Navbar(props) {
         <Link to={`/to-orders/${uid}`}>
           <h4 className="links">Orders to you</h4>
         </Link>
-        <Link to={`/category/${deliverylocation1}/${uid}`}>
+        <Link to={`/category/${deliverylocation}/${uid}`}>
           <h4 className="links">Home</h4>
         </Link>
       </div>
