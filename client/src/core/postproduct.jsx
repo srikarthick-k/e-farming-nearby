@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 
 // MUI
 import { TextField } from "@mui/material";
@@ -21,12 +20,11 @@ function Postproduct() {
   const [deliverycharge, setdeliverycharge] = useState("");
   const [description, setdescription] = useState("");
   const [deliverylocation, setdeliverylocation] = useState("");
-  const [districts, setDistricts] = useState([])
+  const [districts, setDistricts] = useState([]);
   const [minquantity, setminquantity] = useState("");
   const [maxquantity, setmaxquantity] = useState("");
-  const { uid } = useParams();
-  const [city, setCity] = useState("")
-
+  const [city, setCity] = useState("");
+  const uid = localStorage.getItem("uid");
 
   const pnameChange = (e) => {
     setpname(e.target.value);
@@ -74,15 +72,15 @@ function Postproduct() {
       console.error(err.message);
     }
   };
-  const getDefaultCity = async() =>{
+  const getDefaultCity = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/userinfo/${uid}`)
+      const response = await fetch(`http://localhost:4000/userinfo/${uid}`);
       const jsonData = await response.json();
-      setCity(jsonData[0].city)
+      setCity(jsonData[0].city);
     } catch (err) {
       console.error(err.message);
     }
-  }
+  };
 
   useEffect(() => {
     categorySelect();
@@ -92,7 +90,10 @@ function Postproduct() {
 
   const onSubmitPostProduct = async (e) => {
     e.preventDefault();
-
+    if(category === "" || deliverylocation === ""){
+      alert("Please select product category and delivery location district")
+      return;
+    }
     try {
       const body = {
         pname,
@@ -114,7 +115,7 @@ function Postproduct() {
       console.log(body);
       const successfullUpload = await response.json();
       if (successfullUpload) {
-        window.location = `/category/${deliverylocation}/${uid}`;
+        window.location = `/category`;
       }
     } catch (err) {
       console.error(err.message);
@@ -123,7 +124,7 @@ function Postproduct() {
 
   return (
     <Fragment>
-      <Navbar uid={uid} deliverylocation={city}/>
+      <Navbar />
       <center>
         <h1>Post product</h1>
         <form onSubmit={onSubmitPostProduct}>
@@ -133,18 +134,16 @@ function Postproduct() {
               variant="outlined"
               label="Product Name"
               type="text"
-              maxLength={30}
+              inputProps={{ maxLength: 30 }}
               value={pname}
               onChange={pnameChange}
-            />
+            required/>
             {/*  */}
           </div>
           <br />
           <div>
-            <FormControl sx={{ m: 2, minWidth: 150 }}>
-              <InputLabel id="demo-simple-select-helper-label">
-                Category
-              </InputLabel>
+            <FormControl sx={{ m: 2, minWidth: 240 }}>
+              <InputLabel>Category</InputLabel>
               <Select
                 value={category}
                 label="Category"
@@ -169,20 +168,22 @@ function Postproduct() {
               maxLength={20}
               value={unit}
               onChange={unitChange}
-            />
+            required/>
           </div>
           <br />
           <div>
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              label="Price"
-              type="text"
-              placeholder="Price"
-              maxLength={30}
-              value={price}
-              onChange={priceChange}
-            />
+            <FormControl>
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                label="Price"
+                type="text"
+                inputProps={{ maxLength: 6 }}
+                value={price}
+                onChange={priceChange}
+              required/>
+              <FormHelperText>Price of minimum quantity</FormHelperText>
+            </FormControl>
             {/**Only Numbers */}
           </div>
           <br />
@@ -192,42 +193,45 @@ function Postproduct() {
               variant="outlined"
               label="Delivery Charge"
               type="text"
-              placeholder="Delivery Charge"
-              maxLength={30}
+              inputProps={{ maxLength: 6 }}
+              maxLength={6}
               value={deliverycharge}
               onChange={deliverychargeChange}
-            />
+            required/>
           </div>
           <br />
           <div>
             <TextareaAutosize
-              minRows={4}
+              minRows={5}
               placeholder="Description"
               style={{ width: 200 }}
               value={description}
               onChange={descriptionChange}
               maxLength={500}
-
-            />
+            required/>
           </div>
           <br />
           <div>
             <FormControl sx={{ m: 2, minWidth: 150 }}>
-            <InputLabel id="demo-simple-select-helper-label">
-              District
-            </InputLabel>
-            <Select value={deliverylocation} label="District" onChange={deliverylocationChange}>
-              <MenuItem value="">Not Selected</MenuItem>
-              {districts.map((district) => (
-                <MenuItem value={district.dname} key={district.id}>
-                  {district.dname}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>
-              Select a district where you can deliver this product
-            </FormHelperText>
-          </FormControl>
+              <InputLabel id="demo-simple-select-helper-label">
+                District
+              </InputLabel>
+              <Select
+                value={deliverylocation}
+                label="District"
+                onChange={deliverylocationChange}
+              >
+                <MenuItem value="">Not Selected</MenuItem>
+                {districts.map((district) => (
+                  <MenuItem value={district.dname} key={district.id}>
+                    {district.dname}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>
+                Select a district where you can deliver this product
+              </FormHelperText>
+            </FormControl>
           </div>
           <br />
           <div>
@@ -236,11 +240,10 @@ function Postproduct() {
               variant="outlined"
               label="Minimum Quantity"
               type="text"
-              placeholder="Minimum Quantity"
-              maxLength={30}
+              inputProps={{ maxLength: 6 }}
               value={minquantity}
               onChange={minquantityChange}
-            />
+            required/>
             {/*Only Numbers */}
           </div>
           <br />
@@ -250,17 +253,20 @@ function Postproduct() {
               variant="outlined"
               label="Maximum Quantity"
               type="text"
-              placeholder="Maximum Quantity"
-              maxLength={30}
+              inputProps={{ maxLength: 6 }}
               value={maxquantity}
               onChange={maxquantityChange}
-            />
+            required/>
             {/*Only Numbers */}
           </div>
           <br />
           <div>
             <Button variant="outlined" type="submit" sx={{ m: 2 }}>
               SUBMIT
+            </Button>
+          
+            <Button variant="outlined" onClick={()=>{window.location="/post/product"}} sx={{ m: 2 }}>
+              RESET
             </Button>
           </div>
         </form>
