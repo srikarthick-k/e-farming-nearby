@@ -12,7 +12,6 @@ const Product = () => {
   const [product, setProduct] = useState([]);
   const [qty, setQuantity] = useState(1);
   const [address, setAddress] = useState("");
-  const [deliverylocation, setDeliveryLocation] = useState("")
   const [price, setPrice] = useState();
   const { pid } = useParams();
   const { uid } = useParams();
@@ -39,22 +38,12 @@ const Product = () => {
       });
       const result = response.json();
       result
-        ? (window.location = `/category/${product.deliverylocation}/${uid}`)
+        ? (window.location = `/category`)
         : console.log(response);
     } catch (err) {
       console.error(err.message);
     }
   };
-
-  const getDefaultCity = async() =>{
-    try {
-      const response = await fetch(`http://localhost:4000/userinfo/${uid}`)
-      const jsonData = await response.json();
-      setDeliveryLocation(jsonData[0].city)
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
 
   const addressChange = (event) => {
     setAddress(event.target.value);
@@ -62,12 +51,11 @@ const Product = () => {
 
   useEffect(() => {
     renderProduct();
-    getDefaultCity();
   }, []);
   // Render the data in card style
   return (
     <Fragment>
-      <Navbar uid={uid} deliverylocation={deliverylocation}/>
+      <Navbar />
       <center>
       <h1>Product Info</h1>
       <p><b>Name: </b>{product.pname}</p>
