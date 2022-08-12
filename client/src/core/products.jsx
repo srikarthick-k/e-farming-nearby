@@ -15,8 +15,8 @@ import Navbar from "../components/Navbar";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const { category } = useParams();
-  const { uid } = useParams();
-  const { deliverylocation } = useParams();
+  const uid = localStorage.getItem("uid")
+  const deliverylocation = localStorage.getItem("defaultDistrict")
 
   const renderProducts = async () => {
     try {
@@ -36,8 +36,7 @@ const Products = () => {
 
   return (
     <Fragment>
-      {/* <center> */}
-      <Navbar uid={uid} deliverylocation={deliverylocation}/>
+      <Navbar />
       <center><h1>Products</h1></center>
       <TableContainer component={Paper}>
         <Table>
@@ -72,11 +71,8 @@ const Products = () => {
           </TableBody>
         </Table>
         </TableContainer>
-      {/* </center> */}
     </Fragment>
   );
 };
 
 export default Products;
-
-// @TODO:= Complete the rendering of products in selected category and do the next part of rendering individual products on 2/08
