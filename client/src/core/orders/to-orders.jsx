@@ -19,7 +19,7 @@ import { Button } from "@mui/material";
 const ToOrder = () => {
   const [orders, setOrders] = useState([]);
   const [deliverylocation, setDeliveryLocation] = useState("");
-  const { uid } = useParams();
+  const uid = localStorage.getItem("uid")
 
   const onRender = async () => {
     try {
@@ -60,7 +60,7 @@ const ToOrder = () => {
   return (
     <Fragment>
       <center>
-        <Navbar uid={uid} deliverylocation={deliverylocation} />
+        <Navbar />
         <h1>Orders To You</h1>
         {orders[0] ? (
           <TableContainer component={Paper}>
@@ -98,7 +98,7 @@ const ToOrder = () => {
             </Table>
           </TableContainer>
         ) : (
-          <h1>No orders shop more</h1>
+          <h1>No more orders sit back and relax</h1>
         )}
       </center>
     </Fragment>
