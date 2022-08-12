@@ -12,7 +12,6 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Button } from "@mui/material";
-//Theme
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -20,6 +19,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpass, setConfirmPassword] = useState("");
   const [districts, setDistricts] = useState([]);
 
   const nameChange = (event) => {
@@ -48,9 +48,19 @@ export default function Register() {
   const passwordChange = (event) => {
     setPassword(event.target.value);
   };
+  const confirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+  };
   const onSubmitRegister = async (e) => {
     e.preventDefault();
-
+    if(city===""){
+      alert("Please select your district")
+      return;
+    }
+    if(password !== confirmpass){
+      alert("Passwords doesnot match")
+      return;
+    }
     try {
       const body = { username, email, phone, city, password };
       const result = await fetch("http://localhost:4000/auth/register", {
@@ -60,9 +70,13 @@ export default function Register() {
       });
       const userid = await result.json();
       const id = userid.rows[0].id;
-      result
-        ? (window.location = `/category/${city}/${id}`)
-        : alert("User details not saved");
+      if (userid.rows[0]) {
+        localStorage.setItem("defaultDistrict", city);
+        localStorage.setItem("uid", id);
+        userid.rows[0]
+          ? (window.location = `/category`)
+          : alert("User details not saved");
+      } else alert("Error occured while registering");
     } catch (err) {
       console.error(err.message);
     }
@@ -80,7 +94,6 @@ export default function Register() {
   useEffect(() => {
     districtsRender();
   }, []);
-
   return (
     <center>
       <h1>Register</h1>
@@ -90,13 +103,13 @@ export default function Register() {
           <TextField
             id="outlined-basic"
             variant="outlined"
-            label="Full Name:"
+            label="Full Name"
             type="text"
-            inputProps={{ maxLength: 50 }}
+            inputProps={{ maxLength: 30 }}
             value={username}
             onChange={nameChange}
             sx={{ m: 2 }}
-          />
+          required/>
         </div>
 
         {/* email */}
@@ -107,11 +120,11 @@ export default function Register() {
             label="Email Address"
             type="text"
             placeholder="gmail, protonmain, outlook, etc.,"
-            inputProps={{ maxLength: 50 }}
+            inputProps={{ maxLength: 30 }}
             value={email}
             onChange={emailChange}
             sx={{ m: 2 }}
-          />
+          required/>
         </div>
 
         {/* phone */}
@@ -124,9 +137,9 @@ export default function Register() {
             placeholder="(+91)"
             value={phone}
             onChange={onlyNumbers}
-            inputProps={{ maxLength: 12 }}
+            inputProps={{ maxLength: 10 }}
             sx={{ m: 2 }}
-          />
+            required/>
         </div>
 
         {/* city */}
@@ -153,14 +166,14 @@ export default function Register() {
           <TextField
             id="outlined-basic"
             variant="outlined"
-            label="password"
+            label="Password"
             type="password"
             maxLength={255}
-            inputProps={{ maxLength: 255 }}
+            inputProps={{ maxLength: 25 }}
             value={password}
             onChange={passwordChange}
             sx={{ m: 2 }}
-          />
+            required/>
         </div>
 
         {/* confirm password */}
@@ -168,17 +181,21 @@ export default function Register() {
           <TextField
             id="outlined-basic"
             variant="outlined"
-            label="Confirm Password:"
+            label="Confirm Password"
             type="password"
-            inputProps={{ maxLength: 255 }}
+            inputProps={{ maxLength: 25 }}
             sx={{ m: 2 }}
-          />
+            name="confirmpass"
+            onChange={confirmPasswordChange}
+            required/>
         </div>
 
         <div>
-          {/* <button type="submit">Submit</button> */}
           <Button variant="outlined" type="submit" sx={{ m: 2 }}>
             SUBMIT
+          </Button>
+          <Button variant="outlined" onClick={()=>{window.location = "/register"}} sx={{ m: 2 }}>
+            RESET
           </Button>
         </div>
       </form>
