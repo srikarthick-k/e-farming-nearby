@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 
 // CSS
-import "../style.css"
+import "../style.css";
 
 // MUI
 import { TextField } from "@mui/material";
@@ -34,8 +34,12 @@ function Login() {
       });
       const result = await response.json();
       console.log(response.status);
+      if (result.city && result.id) {
+        localStorage.setItem("defaultDistrict", result.city, "uid", result.id);
+        localStorage.setItem("uid", result.id);
+      }
       response.status === 200
-        ? (window.location = `/category/${result.city}/${result.id}`)
+        ? (window.location = `/category`)
         : alert("Login credentials are wrong!!!");
     } catch (err) {
       console.error(err.message);
@@ -57,6 +61,7 @@ function Login() {
               onChange={emailChange}
               maxLength={50}
               sx={{ m: 2 }}
+              required
             />
           </div>
           <br />
@@ -70,6 +75,7 @@ function Login() {
               onChange={passwordChange}
               maxLength={255}
               sx={{ m: 2 }}
+              required
             />
           </div>
           <br />
@@ -79,7 +85,10 @@ function Login() {
             </Button>
           </div>
         </form>
-        New User? <Link to={`/register`} className="links">Register</Link>
+        New User?{" "}
+        <Link to={`/register`} className="links">
+          Register
+        </Link>
       </center>
     </Fragment>
   );
