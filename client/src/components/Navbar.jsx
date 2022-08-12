@@ -4,24 +4,39 @@ import { Link } from "react-router-dom";
 // CSS
 import "../style.css";
 
-function Navbar(props) {
-  const uid = props.uid;
-  const deliverylocation = props.deliverylocation;
+import { Button } from "@mui/material";
+
+function Navbar() {
   return (
     <Fragment>
-      <div className="navigation">
-        <Link to={`/post/product/${uid}`}>
-          <h4 className="links">Post product</h4>
-        </Link>
-        <Link to={`/from-orders/${uid}`}>
-          <h4 className="links">Orders from you</h4>
-        </Link>
-        <Link to={`/to-orders/${uid}`}>
-          <h4 className="links">Orders to you</h4>
-        </Link>
-        <Link to={`/category/${deliverylocation}/${uid}`}>
-          <h4 className="links">Home</h4>
-        </Link>
+      <div className="navbar">
+        <div className="logout">
+          <Button
+            onClick={() => {
+              localStorage.clear();
+              window.location = "/";
+            }}
+          >
+            Logout
+          </Button>
+        </div>
+        <div className="navigation">
+          <Link to={`/post/product`}>
+            <h4 className="links">Post product</h4>
+          </Link>
+          <Link to={`/from-orders`}>
+            <h4 className="links">Orders from you</h4>
+          </Link>
+          <Link to={`/to-orders`}>
+            <h4 className="links">Orders to you</h4>
+          </Link>
+          <Link to={`/myproducts`}>
+            <h4 className="links">My products</h4>
+          </Link>
+          <Link to={`/category`}>
+            <h4 className="links">Home</h4>
+          </Link>
+        </div>
       </div>
     </Fragment>
   );
