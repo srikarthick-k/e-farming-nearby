@@ -43,7 +43,7 @@ app.delete("deleteorder/:orderid", async(req, res)=>{
   }
 })
 
-//3. Post product
+// Post product
 app.post("/product", async (req, res) => {
   try {
     const {
@@ -78,17 +78,13 @@ app.post("/product", async (req, res) => {
     console.error(err.message);
   }
 });
-// Working fine
-// In frontend The seller shouldn't have access to post prating
 
-// Get category:
-// Fetches categories based on delivery location without repeatition
-app.get("/category/:deliverylocation", async (req, res) => {
+app.get("/category", async (req, res) => {
   try {
-    const { deliverylocation } = req.params;
+    const defaultDistrict = req.header("defaultDistrict");
     const category = await pool.query(
       "SELECT category FROM product WHERE deliverylocation = $1 GROUP BY category HAVING COUNT(*) >= 1;",
-      [deliverylocation]
+      [defaultDistrict]
     );
     if (category.rowCount === 0) {
       return res.status(404).json(category.rows);
@@ -108,6 +104,7 @@ app.get("/categoryselect", async (req, res) => {
   }
 });
 
+// View Product (All and Individual)
 // get all products in category
 app.get("/products/:category/:deliverylocation", async (req, res) => {
   try {
@@ -124,7 +121,7 @@ app.get("/products/:category/:deliverylocation", async (req, res) => {
     console.error(err.message);
   }
 });
-// 4. View Product (All and Individual)
+
 // individual product
 app.get("/product/:pid", async (req, res) => {
   try {
@@ -204,6 +201,26 @@ app.get("/to-orders/:uid", async (req, res) => {
     console.error(err.message);
   }
 });
+
+app.get("/myproducts", async(req, res)=>{
+  try {
+    const uid = req.header("uid")
+    const products = await pool.query("select * from product where sellerid = $1", [uid])
+    return res.json(products.rows);
+  } catch (err) {
+    console.error(err.message); 
+  }
+})
+
+app.delete(`/deleteproduct/:productid`, async(req, res)=>{
+  try {
+    const {productid} = req.params;
+    await pool.query("delete from product where id = $1", [productid])
+    return res.status(200)
+  } catch (err) {
+    console.error(err.message);
+  }
+})
 
 app.listen(4000, () => {
   console.log("server started at port 4000");
