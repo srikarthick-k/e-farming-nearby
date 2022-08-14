@@ -19,6 +19,7 @@ import ToOrder from "./core/orders/to-orders";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MyProducts from "./core/orders/myproducts";
+import Feedback from "./core/feedback";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const darkTheme = createTheme({
@@ -35,18 +36,13 @@ root.render(
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            
-            <Route
-              path="/category"
-              element={<Category />}
-            />
+
+            <Route path="/category" element={<Category />} />
             <Route path="/post/product" element={<Postproduct />} />
-            <Route
-              path="/products/:category"
-              element={<Products />}
-            />
+            <Route path="/products/:category" element={<Products />} />
             <Route path="/product/:pid/:uid" element={<Product />} />
-            
+            <Route path="/feedback" element={<Feedback />} />
+
             <Route path="/from-orders" element={<FromOrder />} />
             <Route path="/to-orders" element={<ToOrder />} />
             <Route path="/myproducts" element={<MyProducts />} />
