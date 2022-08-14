@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 // CSS
 import "../style.css";
 
+// MUI
 import { Button } from "@mui/material";
 
 function Navbar() {
@@ -21,6 +22,9 @@ function Navbar() {
           </Button>
         </div>
         <div className="navigation">
+          <Link to={`/feedback`}>
+            <h4 className="links">Feedback</h4>
+          </Link>
           <Link to={`/post/product`}>
             <h4 className="links">Post product</h4>
           </Link>
