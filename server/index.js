@@ -222,6 +222,22 @@ app.delete(`/deleteproduct/:productid`, async(req, res)=>{
   }
 })
 
+app.post("/feedback", async(req, res)=>{
+  try {
+    const {uid, feedback} = req.body;
+    const isAvailable= await pool.query("select feed from feedback where id=$1", [uid])
+
+    if(!isAvailable.rows[0]){
+      await pool.query("INSERT INTO feedback(id, feed) values($1, $2)", [uid, feedback])
+      return res.status(200).json("Thank you")
+    }
+    await pool.query("UPDATE feedback SET feed=$1 where id=$2", [feedback, uid])
+    return res.status(202).json("Thank you for updating your feedback")
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
 app.listen(4000, () => {
   console.log("server started at port 4000");
 });
