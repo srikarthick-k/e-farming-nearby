@@ -62,3 +62,8 @@ create table category(
     id serial primary key,
     catname varchar(50)
 );
+
+-- FEEDBACK
+CREATE TABLE feedback(
+    id UUID, feed VARCHAR(500)
+);
