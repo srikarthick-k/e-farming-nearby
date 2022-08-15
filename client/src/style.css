@@ -40,6 +40,18 @@
     position: sticky;
     z-index: 2;
 }
+#git{
+    background-color: black;
+    padding: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#git:hover{
+    transform: scale(1.05);
+}
 
 .logout > button{
     align-items: center;
