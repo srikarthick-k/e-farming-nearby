@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 
 // toast.configure()
 const Feedback = () => {
+  document.title = "Feedback";
   const [feedback, setFeedback] = useState("");
   const uid = localStorage.getItem("uid");
 

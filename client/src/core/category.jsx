@@ -6,6 +6,7 @@ import { Button } from "@mui/material";
 import "../style.css";
 
 function Category() {
+  document.title = "Select a category";
   const deliverylocation = localStorage.getItem("defaultDistrict");
   const [categories, setcategories] = useState([]);
 
@@ -30,15 +31,13 @@ function Category() {
     return (
       <ul className="cats">
         {categories.map((cat) => (
-          
-            <Button
-              key={cat.category}
-              onClick={() => (window.location = `/products/${cat.category}`)}
-              variant="outlined"
-              
-            >
-              {cat.category}
-            </Button>
+          <Button
+            key={cat.category}
+            onClick={() => (window.location = `/products/${cat.category}`)}
+            variant="outlined"
+          >
+            {cat.category}
+          </Button>
         ))}
       </ul>
     );

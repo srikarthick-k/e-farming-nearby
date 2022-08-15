@@ -14,6 +14,7 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 
 const MyProducts = () => {
+  document.title = "My Products";
   const [products, setProducts] = useState([]);
   const uid = localStorage.getItem("uid");
 

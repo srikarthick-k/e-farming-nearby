@@ -12,6 +12,7 @@ import TextareaAutosize from "@mui/base/TextareaAutosize";
 import Navbar from "../components/Navbar";
 
 function Postproduct() {
+  document.title = "Post product";
   const [pname, setpname] = useState("");
   const [category, setcategory] = useState("");
   const [categories, setcategories] = useState([]);
@@ -90,8 +91,8 @@ function Postproduct() {
 
   const onSubmitPostProduct = async (e) => {
     e.preventDefault();
-    if(category === "" || deliverylocation === ""){
-      alert("Please select product category and delivery location district")
+    if (category === "" || deliverylocation === "") {
+      alert("Please select product category and delivery location district");
       return;
     }
     try {
@@ -137,7 +138,8 @@ function Postproduct() {
               inputProps={{ maxLength: 30 }}
               value={pname}
               onChange={pnameChange}
-            required/>
+              required
+            />
             {/*  */}
           </div>
           <br />
@@ -168,7 +170,8 @@ function Postproduct() {
               maxLength={20}
               value={unit}
               onChange={unitChange}
-            required/>
+              required
+            />
           </div>
           <br />
           <div>
@@ -181,7 +184,8 @@ function Postproduct() {
                 inputProps={{ maxLength: 6 }}
                 value={price}
                 onChange={priceChange}
-              required/>
+                required
+              />
               <FormHelperText>Price of minimum quantity</FormHelperText>
             </FormControl>
             {/**Only Numbers */}
@@ -197,7 +201,8 @@ function Postproduct() {
               maxLength={6}
               value={deliverycharge}
               onChange={deliverychargeChange}
-            required/>
+              required
+            />
           </div>
           <br />
           <div>
@@ -208,7 +213,8 @@ function Postproduct() {
               value={description}
               onChange={descriptionChange}
               maxLength={500}
-            required/>
+              required
+            />
           </div>
           <br />
           <div>
@@ -243,7 +249,8 @@ function Postproduct() {
               inputProps={{ maxLength: 6 }}
               value={minquantity}
               onChange={minquantityChange}
-            required/>
+              required
+            />
             {/*Only Numbers */}
           </div>
           <br />
@@ -256,7 +263,8 @@ function Postproduct() {
               inputProps={{ maxLength: 6 }}
               value={maxquantity}
               onChange={maxquantityChange}
-            required/>
+              required
+            />
             {/*Only Numbers */}
           </div>
           <br />
@@ -264,8 +272,14 @@ function Postproduct() {
             <Button variant="outlined" type="submit" sx={{ m: 2 }}>
               SUBMIT
             </Button>
-          
-            <Button variant="outlined" onClick={()=>{window.location="/post/product"}} sx={{ m: 2 }}>
+
+            <Button
+              variant="outlined"
+              onClick={() => {
+                window.location = "/post/product";
+              }}
+              sx={{ m: 2 }}
+            >
               RESET
             </Button>
           </div>

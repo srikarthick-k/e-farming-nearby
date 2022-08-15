@@ -19,6 +19,7 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 
 const FromOrder = () => {
+  document.title = "Orders from you";
   const [orders, setOrders] = useState([]);
   const [deliverylocation, setDeliveryLocation] = useState("");
   const uid = localStorage.getItem("uid");

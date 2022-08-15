@@ -9,6 +9,7 @@ import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 
 function Login() {
+  document.title = "Login";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

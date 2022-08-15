@@ -2,11 +2,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 // CSS
-import "../style.css"
+import "../style.css";
 
 // MUI
 import { TextareaAutosize } from "@mui/material";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 
 const Product = () => {
   const [product, setProduct] = useState([]);
@@ -16,7 +16,8 @@ const Product = () => {
   const { pid } = useParams();
   const { uid } = useParams();
   // OnRender 🎬
-  
+  document.title = "Order " + product.pname;
+
   const renderProduct = async () => {
     try {
       const response = await fetch(`http://localhost:4000/product/${pid}`);
@@ -37,9 +38,7 @@ const Product = () => {
         body: JSON.stringify(body),
       });
       const result = response.json();
-      result
-        ? (window.location = `/category`)
-        : console.log(response);
+      result ? (window.location = `/category`) : console.log(response);
     } catch (err) {
       console.error(err.message);
     }
@@ -57,60 +56,74 @@ const Product = () => {
     <Fragment>
       <Navbar />
       <center>
-      <h1>Product Info</h1>
-      <p><b>Name: </b>{product.pname}</p>
-      <p><b>Category: </b>{product.category}</p>
-      <p><b>Delivery City: </b>{product.deliverylocation} </p>
-      <p>
-      <b>Content: </b>{product.minquantity} {product.unit} / Rs. {product.price}
-      </p>
-      <div className="buyQ">
-
-      <p><b>Buy Quantity: </b>{qty}</p>
-      <Button
-        onClick={() => {
-          if (qty < product.maxquantity / product.minquantity) {
-            setQuantity(qty + 1);
-          }
-        }}
-        >
-        <h1>+</h1>
-      </Button>
-      <Button
-        onClick={() => {
-          if (qty > 0) {
-            setQuantity(qty - 1);
-          }
-        }}
-        >
-        <h1>-</h1>
-      </Button>
-          </div>
-      <p><b>Delivery Charge: </b>Rs.{product.deliverycharge}</p>
-      <p>
-      <b>Total Price:</b>
-        {qty > 0 ? price * qty + product.deliverycharge : "ZERO"}
-      </p>
-      <div>
-        <TextareaAutosize
-          minRows={9}
-          style={{ width: 200 }}
-          cols="30"
-          rows="10"
-          placeholder="Address to be delivered"
-          value={address}
-          onChange={addressChange}
+        <h1>Product Info</h1>
+        <p>
+          <b>Name: </b>
+          {product.pname}
+        </p>
+        <p>
+          <b>Category: </b>
+          {product.category}
+        </p>
+        <p>
+          <b>Delivery City: </b>
+          {product.deliverylocation}{" "}
+        </p>
+        <p>
+          <b>Content: </b>
+          {product.minquantity} {product.unit} / Rs. {product.price}
+        </p>
+        <div className="buyQ">
+          <p>
+            <b>Buy Quantity: </b>
+            {qty}
+          </p>
+          <Button
+            onClick={() => {
+              if (qty < product.maxquantity / product.minquantity) {
+                setQuantity(qty + 1);
+              }
+            }}
+          >
+            <h1>+</h1>
+          </Button>
+          <Button
+            onClick={() => {
+              if (qty > 0) {
+                setQuantity(qty - 1);
+              }
+            }}
+          >
+            <h1>-</h1>
+          </Button>
+        </div>
+        <p>
+          <b>Delivery Charge: </b>Rs.{product.deliverycharge}
+        </p>
+        <p>
+          <b>Total Price:</b>
+          {qty > 0 ? price * qty + product.deliverycharge : "ZERO"}
+        </p>
+        <div>
+          <TextareaAutosize
+            minRows={9}
+            style={{ width: 200 }}
+            cols="30"
+            rows="10"
+            placeholder="Address to be delivered"
+            value={address}
+            onChange={addressChange}
           />
-      </div>
-      <Button
-        onClick={() => {
-          onPlaceOrder();
-        }}
-        variant="contained"
+        </div>
+        <Button
+          onClick={() => {
+            onPlaceOrder();
+          }}
+          variant="contained"
         >
-        PlaceOrder
-      </Button>
-        </center>
+          PlaceOrder
+        </Button>
+      </center>
     </Fragment>
   );
 };

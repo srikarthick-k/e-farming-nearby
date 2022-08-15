@@ -1,22 +1,23 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 // CSS
-import "../style.css"
+import "../style.css";
 // MUI
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import Navbar from "../components/Navbar";
 
 const Products = () => {
+  document.title = "Select a product";
   const [products, setProducts] = useState([]);
   const { category } = useParams();
-  const uid = localStorage.getItem("uid")
-  const deliverylocation = localStorage.getItem("defaultDistrict")
+  const uid = localStorage.getItem("uid");
+  const deliverylocation = localStorage.getItem("defaultDistrict");
 
   const renderProducts = async () => {
     try {
@@ -37,7 +38,9 @@ const Products = () => {
   return (
     <Fragment>
       <Navbar />
-      <center><h1>Products</h1></center>
+      <center>
+        <h1>Products</h1>
+      </center>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -53,8 +56,8 @@ const Products = () => {
           <TableBody>
             {products.map((prod) => (
               <TableRow
-              className="trow"
-              hover={true}
+                className="trow"
+                hover={true}
                 key={prod.id}
                 onClick={() => {
                   window.location = `/product/${prod.id}/${uid}`;
@@ -70,7 +73,7 @@ const Products = () => {
             ))}
           </TableBody>
         </Table>
-        </TableContainer>
+      </TableContainer>
     </Fragment>
   );
 };

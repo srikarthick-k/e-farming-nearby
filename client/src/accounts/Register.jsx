@@ -14,6 +14,7 @@ import Select from "@mui/material/Select";
 import { Button } from "@mui/material";
 
 export default function Register() {
+  document.title = "Register";
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
