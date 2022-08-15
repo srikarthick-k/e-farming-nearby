@@ -3,12 +3,17 @@ import { Link } from "react-router-dom";
 
 // CSS
 import "./style.css";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 const Index = () => {
   document.title = "e-farming nearby";
+  const sourcecode = (e) => {
+    e.preventDefault();
+    window.location = "https://github.com/srikarthick-k/e-farming-nearby";
+  };
   return (
     <Fragment>
-      <div className="navbar">
+      <div className="navbar homenav">
         <div className="navigation">
           <Link to={"/login"}>
             <h4 className="links">Login</h4>
@@ -18,6 +23,14 @@ const Index = () => {
           <Link to={"/register"}>
             <h4 className="links">Register</h4>
           </Link>
+        </div>
+        <div id="git">
+          <GitHubIcon
+            sx={{ fontSize: 80 }}
+            onClick={(e) => {
+              sourcecode(e);
+            }}
+          />
         </div>
       </div>
       <div className="indexDec">
