@@ -24,7 +24,6 @@ function Postproduct() {
   const [districts, setDistricts] = useState([]);
   const [minquantity, setminquantity] = useState("");
   const [maxquantity, setmaxquantity] = useState("");
-  const [city, setCity] = useState("");
   const uid = localStorage.getItem("uid");
 
   const pnameChange = (e) => {
@@ -73,20 +72,10 @@ function Postproduct() {
       console.error(err.message);
     }
   };
-  const getDefaultCity = async () => {
-    try {
-      const response = await fetch(`http://localhost:4000/userinfo/${uid}`);
-      const jsonData = await response.json();
-      setCity(jsonData[0].city);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
 
   useEffect(() => {
     categorySelect();
     districtsRender();
-    getDefaultCity();
   }, []);
 
   const onSubmitPostProduct = async (e) => {
@@ -166,6 +155,7 @@ function Postproduct() {
               id="outlined-basic"
               variant="outlined"
               label="Unit"
+              placeholder="like kg, grams, nos...."
               type="text"
               maxLength={20}
               value={unit}
@@ -180,6 +170,7 @@ function Postproduct() {
                 id="outlined-basic"
                 variant="outlined"
                 label="Price"
+                placeholder="in INR"
                 type="text"
                 inputProps={{ maxLength: 6 }}
                 value={price}
@@ -196,6 +187,7 @@ function Postproduct() {
               id="outlined-basic"
               variant="outlined"
               label="Delivery Charge"
+              placeholder="in INR"
               type="text"
               inputProps={{ maxLength: 6 }}
               maxLength={6}
