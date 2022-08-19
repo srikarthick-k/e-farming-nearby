@@ -8,9 +8,10 @@ app.use(cors());
 app.use(express.json()); //used to access req.body
 
 // Routes
-app.use("/auth", require("./routes/jwtAuth"));
 // Register Account or login
+app.use("/auth", require("./routes/jwtAuth"));
 
+// Display Districts in select box
 app.get("/districts", async (req, res) => {
   try {
     const districts = await pool.query("SELECT * FROM DISTRICTS");
@@ -20,29 +21,7 @@ app.get("/districts", async (req, res) => {
   }
 });
 
-app.get("/userinfo/:uid", async (req, res) => {
-  try {
-    const { uid } = req.params;
-    const info = await pool.query(
-      "SELECT city from accounts where id = $1",
-      [uid]
-    );
-    return res.json(info.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-app.delete("deleteorder/:orderid", async(req, res)=>{
-  try {
-    const {orderid} = req.params;
-     await pool.query("DELETE FROM orders WHERE orderid = $1", [orderid]); 
-     res.json("Successfully deleted")
-  } catch (err) {
-    console.error(err.message);
-  }
-})
-
+// Products and category
 // Post product
 app.post("/product", async (req, res) => {
   try {
@@ -138,6 +117,27 @@ app.get("/product/:pid", async (req, res) => {
   }
 });
 
+app.get("/myproducts", async(req, res)=>{
+  try {
+    const uid = req.header("uid")
+    const products = await pool.query("select * from product where sellerid = $1", [uid])
+    return res.json(products.rows);
+  } catch (err) {
+    console.error(err.message); 
+  }
+})
+
+app.delete(`/deleteproduct/:productid`, async(req, res)=>{
+  try {
+    const {productid} = req.params;
+    await pool.query("delete from product where id = $1", [productid])
+    return res.status(200)
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
+// Orders
 // Place Order
 app.post("/order", async (req, res) => {
   try {
@@ -190,6 +190,7 @@ app.get("/from-orders/:uid", async (req, res) => {
   }
 });
 
+// Display orders in seller side given by customer
 app.get("/to-orders/:uid", async (req, res) => {
   try {
     const { uid } = req.params;
@@ -202,26 +203,18 @@ app.get("/to-orders/:uid", async (req, res) => {
   }
 });
 
-app.get("/myproducts", async(req, res)=>{
+// delete order after delivering product
+app.delete("deleteorder/:orderid", async(req, res)=>{
   try {
-    const uid = req.header("uid")
-    const products = await pool.query("select * from product where sellerid = $1", [uid])
-    return res.json(products.rows);
-  } catch (err) {
-    console.error(err.message); 
-  }
-})
-
-app.delete(`/deleteproduct/:productid`, async(req, res)=>{
-  try {
-    const {productid} = req.params;
-    await pool.query("delete from product where id = $1", [productid])
-    return res.status(200)
+    const {orderid} = req.params;
+     await pool.query("DELETE FROM orders WHERE orderid = $1", [orderid]); 
+     res.json("Successfully deleted")
   } catch (err) {
     console.error(err.message);
   }
 })
 
+// feedback
 app.post("/feedback", async(req, res)=>{
   try {
     const {uid, feedback} = req.body;
@@ -233,6 +226,15 @@ app.post("/feedback", async(req, res)=>{
     }
     await pool.query("UPDATE feedback SET feed=$1 where id=$2", [feedback, uid])
     return res.status(202).json("Thank you for updating your feedback")
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
+app.get("/feedback", async(req, res)=>{
+  try {
+    const feedbacks = await pool.query("SELECT * FROM feedback")
+    return res.status(200).json(feedbacks)
   } catch (err) {
     console.error(err.message);
   }
