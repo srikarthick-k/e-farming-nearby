@@ -15,11 +15,12 @@ const Index = () => {
     <Fragment>
       <div className="navbar homenav">
         <div className="navigation">
+          <Link to={"/viewfeed"}>
+            <h4 className="links">Feedbacks</h4>
+          </Link>
           <Link to={"/login"}>
             <h4 className="links">Login</h4>
           </Link>
-          <br />
-          <br />
           <Link to={"/register"}>
             <h4 className="links">Register</h4>
           </Link>
