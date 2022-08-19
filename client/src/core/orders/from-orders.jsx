@@ -2,7 +2,6 @@
 // Display orders based on customerID
 
 import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
 // CSS
@@ -16,12 +15,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button } from "@mui/material";
 
 const FromOrder = () => {
   document.title = "Orders from you";
   const [orders, setOrders] = useState([]);
-  const [deliverylocation, setDeliveryLocation] = useState("");
   const uid = localStorage.getItem("uid");
 
   const onRender = async () => {
@@ -33,23 +30,13 @@ const FromOrder = () => {
       console.error(err.message);
     }
   };
-  const getDefaultCity = async () => {
-    try {
-      const response = await fetch(`http://localhost:4000/userinfo/${uid}`);
-      const jsonData = await response.json();
-      setDeliveryLocation(jsonData[0].city);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
   useEffect(() => {
     onRender();
-    getDefaultCity();
   }, []);
 
   return (
     <Fragment>
-      <Navbar uid={uid} deliverylocation={deliverylocation} />
+      <Navbar />
       <center>
         <h1>Orders From You</h1>
 
@@ -64,7 +51,6 @@ const FromOrder = () => {
                   <TableCell>TOTAL-PRICE</TableCell>
                   <TableCell>CITY</TableCell>
                   <TableCell>ADDRESS</TableCell>
-                  <TableCell>UPDATE</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -78,9 +64,6 @@ const FromOrder = () => {
                     </TableCell>
                     <TableCell>{order.city}</TableCell>
                     <TableCell>{order.address}</TableCell>
-                    <TableCell>
-                      <Button>UPDATE</Button>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

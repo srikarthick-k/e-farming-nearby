@@ -2,7 +2,6 @@
 // Display orders based on selleriD
 
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 // CSS
 import "../../style.css";
@@ -19,7 +18,6 @@ import { Button } from "@mui/material";
 const ToOrder = () => {
   document.title = "Orders to You";
   const [orders, setOrders] = useState([]);
-  const [deliverylocation, setDeliveryLocation] = useState("");
   const uid = localStorage.getItem("uid")
 
   const onRender = async () => {
@@ -27,16 +25,6 @@ const ToOrder = () => {
       const response = await fetch(`http://localhost:4000/to-orders/${uid}`);
       const jsonData = await response.json();
       setOrders(jsonData);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const getDefaultCity = async () => {
-    try {
-      const response = await fetch(`http://localhost:4000/userinfo/${uid}`);
-      const jsonData = await response.json();
-      setDeliveryLocation(jsonData[0].city);
     } catch (err) {
       console.error(err.message);
     }
@@ -55,7 +43,6 @@ const ToOrder = () => {
 
   useEffect(() => {
     onRender();
-    getDefaultCity();
   }, []);
 
   return (
