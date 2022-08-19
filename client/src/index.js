@@ -20,6 +20,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MyProducts from "./core/orders/myproducts";
 import Feedback from "./core/feedback";
+import ViewFeedback from "./components/ViewFeedback";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const darkTheme = createTheme({
@@ -36,6 +37,7 @@ root.render(
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/viewfeed" element={<ViewFeedback />} />
 
             <Route path="/category" element={<Category />} />
             <Route path="/post/product" element={<Postproduct />} />
