@@ -67,3 +67,5 @@ create table category(
 CREATE TABLE feedback(
     id UUID, feed VARCHAR(500)
 );
+
+psql --host=ec2-99-80-170-190.eu-west-1.compute.amazonaws.com --port=5432 --username=rqythtnujlancf --password --dbname=dehv653tmgq3ha
