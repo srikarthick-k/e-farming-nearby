@@ -1,8 +1,8 @@
 # Client files
-/client/node_modules
-/client/package-lock.json
-/client/package.json
-/client/README.md
+/server/client/node_modules
+/server/client/package-lock.json
+/server/client/package.json
+# /server/client/README.md
 
 # Server files
 /server/node_modules
