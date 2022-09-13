@@ -2,10 +2,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
+const path = require("path")
 
 // middleware
 app.use(cors());
 app.use(express.json()); //used to access req.body
+
+if (process.env.NODE_ENV === "production")
+  app.use(express.static(path.join(__dirname, "./client/build")));
 
 // Routes
 // Register Account or login
@@ -14,7 +18,7 @@ app.use("/auth", require("./routes/jwtAuth"));
 // Display Districts in select box
 app.get("/districts", async (req, res) => {
   try {
-    const districts = await pool.query("SELECT * FROM DISTRICTS");
+    const districts = await pool.query("SELECT * FROM districts");
     return res.json(districts.rows);
   } catch (err) {
     console.error(err.message);
@@ -117,25 +121,29 @@ app.get("/product/:pid", async (req, res) => {
   }
 });
 
-app.get("/myproducts", async(req, res)=>{
+app.get("/myproducts", async (req, res) => {
   try {
-    const uid = req.header("uid")
-    const products = await pool.query("select * from product where sellerid = $1", [uid])
+    const uid = req.header("uid");
+    const products = await pool.query(
+      "select * from product where sellerid = $1",
+      [uid]
+    );
+    console.log("Request HTTP Version: ", req.httpVersion);
     return res.json(products.rows);
-  } catch (err) {
-    console.error(err.message); 
-  }
-})
-
-app.delete(`/deleteproduct/:productid`, async(req, res)=>{
-  try {
-    const {productid} = req.params;
-    await pool.query("delete from product where id = $1", [productid])
-    return res.status(200)
   } catch (err) {
     console.error(err.message);
   }
-})
+});
+
+app.delete(`/deleteproduct/:productid`, async (req, res) => {
+  try {
+    const { productid } = req.params;
+    await pool.query("delete from product where id = $1", [productid]);
+    return res.status(200);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 // Orders
 // Place Order
@@ -204,42 +212,60 @@ app.get("/to-orders/:uid", async (req, res) => {
 });
 
 // delete order after delivering product
-app.delete("deleteorder/:orderid", async(req, res)=>{
+app.delete("deleteorder/:orderid", async (req, res) => {
   try {
-    const {orderid} = req.params;
-     await pool.query("DELETE FROM orders WHERE orderid = $1", [orderid]); 
-     res.json("Successfully deleted")
+    const { orderid } = req.params;
+    await pool.query("DELETE FROM orders WHERE orderid = $1", [orderid]);
+    res.json("Successfully deleted");
   } catch (err) {
     console.error(err.message);
   }
-})
+});
 
 // feedback
-app.post("/feedback", async(req, res)=>{
+app.post("/feedback", async (req, res) => {
   try {
-    const {uid, feedback} = req.body;
-    const isAvailable= await pool.query("select feed from feedback where id=$1", [uid])
+    const { uid, feedback } = req.body;
+    const isAvailable = await pool.query(
+      "select feed from feedback where id=$1",
+      [uid]
+    );
 
-    if(!isAvailable.rows[0]){
-      await pool.query("INSERT INTO feedback(id, feed) values($1, $2)", [uid, feedback])
-      return res.status(200).json("Thank you")
+    if (!isAvailable.rows[0]) {
+      await pool.query("INSERT INTO feedback(id, feed) values($1, $2)", [
+        uid,
+        feedback,
+      ]);
+      return res.status(200).json("Thank you");
     }
-    await pool.query("UPDATE feedback SET feed=$1 where id=$2", [feedback, uid])
-    return res.status(202).json("Thank you for updating your feedback")
+    await pool.query("UPDATE feedback SET feed=$1 where id=$2", [
+      feedback,
+      uid,
+    ]);
+    return res.status(202).json("Thank you for updating your feedback");
   } catch (err) {
     console.error(err.message);
   }
-})
-
-app.get("/feedback", async(req, res)=>{
+});
+   
+app.get("/feedback", async (req, res) => {
   try {
-    const feedbacks = await pool.query("SELECT * FROM feedback")
-    return res.status(200).json(feedbacks)
+    const feedbacks = await pool.query("SELECT * FROM feedback");
+    return res.status(200).json(feedbacks);
   } catch (err) {
     console.error(err.message);
   }
-})
+});
 
-app.listen(4000, () => {
-  console.log("server started at port 4000");
+
+app.get("/test", async (req, res) => {   
+  res.send("Hello world. My first Web Hosted 🔥");
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
+
+app.listen(process.env.PORT || 4000, () => {
+  console.log(`server started at port ${process.env.PORT || 4000}`);
 });
